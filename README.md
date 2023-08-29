@@ -14,7 +14,7 @@
 
 ## Ejecución
 
-> Luego de descargar las librerías de la aplicación, ejecúta el servidor local para probar que todo funciona sin problema.
+> Luego de descargar las librerías de la aplicación, ejecuta el servidor local para probar que todo funciona sin problema.
 
 ```bash
     npm run dev
