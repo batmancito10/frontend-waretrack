@@ -1,6 +1,44 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 
 function Login () {
+    const [user, setUser] = useState('');
+    const [pass, setPass] = useState('');
+
+    const navigate = useNavigate();
+
+    const makeRequest = async () => {
+        const response = await fetch('https://waretrack-api.onrender.com/token/', {
+            mode: 'cors',
+            method: 'post',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({
+                username: user,
+                password: pass
+            })
+        });
+        if(response.status !== 200){
+            const error = response.status === 401 ? ' Nombre de usuario o contraseña incorrectos, intente nuevamente.' : ' Hubo un error, intente nuevamente.'
+            throw new Error(error);
+        }
+        return await response.json();
+    }
+    
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        makeRequest().then((response) => {
+            console.log(response);
+            localStorage.setItem('accessToken', response.access);
+            localStorage.setItem('refreshToken', response.refresh);
+            localStorage.setItem('userInfo', JSON.stringify(response.user));
+            navigate('/')
+        }
+        ).catch((err) => {
+            alert(err);
+        });
+        
+    }
+
     return <>
     <div className="container position-sticky z-index-sticky top-0">
         <div className="row">
@@ -31,7 +69,7 @@ function Login () {
                     <p className="mb-0">Ingresa tu usuario y tu contraseña</p>
                     </div>
                     <div className="card-body">
-                    <form role="form">
+                    <form role="form" onSubmit={onSubmit}>
                         <label htmlFor='username'>Usuario</label>
                         <div className="mb-3">
                         <input
@@ -44,6 +82,9 @@ function Login () {
                             aria-label="Email"
                             aria-describedby="email-addon"
                             maxLength={20}
+                            value={user}
+                            onChange={(e) => setUser(e.target.value)}
+                            required
                         />
                         </div>
                         <label htmlFor='password'>Contraseña</label>
@@ -56,6 +97,9 @@ function Login () {
                             placeholder="Contraseña"
                             aria-label="Password"
                             aria-describedby="password-addon"
+                            value={pass}
+                            onChange={(e) => setPass(e.target.value)}
+                            required
                         />
                         </div>
                         <div className="form-check form-switch">
@@ -70,13 +114,13 @@ function Login () {
                         </label>
                         </div>
                         <div className="text-center">
-                        {/* <button
-                            type="button"
+                        <button
+                            type="submit"
                             className="btn bg-gradient-info w-100 mt-4 mb-0"
                         >
                             Ingresar
-                        </button> */}
-                        <Link to="/app/dashboard" className='btn bg-gradient-info w-100 mt-4 mb-0'>Ingresar</Link>
+                        </button>
+                        {/* <Link to="/" className='btn bg-gradient-info w-100 mt-4 mb-0'>Ingresar</Link> */}
                         </div>
                     </form>
                     </div>
