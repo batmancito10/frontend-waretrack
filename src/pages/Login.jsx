@@ -27,7 +27,6 @@ function Login () {
     const onSubmit = async (e) => {
         e.preventDefault();
         makeRequest().then((response) => {
-            console.log(response);
             localStorage.setItem('accessToken', response.access);
             localStorage.setItem('refreshToken', response.refresh);
             localStorage.setItem('userInfo', JSON.stringify(response.user));

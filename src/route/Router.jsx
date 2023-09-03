@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link, createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Login from '../pages/Login';
+import Logout from '../components/utils/Logout';
 import App from '../App';
 import Dashboard from '../pages/views/Dashboard'
 import Profile from '../pages/views/Profile'
@@ -12,6 +13,7 @@ function Router () {
         <BrowserRouter>
             <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
                 <Route element={<RouteProtector />}>
                     <Route path="/" element={<App />} exact>
                         <Route path="dashboard" element={<Dashboard />}/>
