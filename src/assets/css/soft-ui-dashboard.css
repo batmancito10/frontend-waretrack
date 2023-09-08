@@ -3368,8 +3368,8 @@ textarea.form-control-lg {
 .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n + 3),
 .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
 .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 .input-group.has-validation> :nth-last-child(n + 3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
@@ -21581,8 +21581,8 @@ fieldset:disabled .btn {
 
 .form-control {
   border-radius: 0.5rem;
-  border-top-right-radius: 0.5rem !important;
-  border-bottom-right-radius: 0.5rem !important;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   border-left-width: 1px;
 }
 
