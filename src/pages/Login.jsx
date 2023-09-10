@@ -7,8 +7,10 @@ function Login () {
 
     const navigate = useNavigate();
 
+    //console.log();
+
     const makeRequest = async () => {
-        const response = await fetch('https://waretrack-api.onrender.com/token/', {
+        const response = await fetch(import.meta.env.VITE_TOKEN, {
             mode: 'cors',
             method: 'post',
             headers: {'Content-type': 'application/json'},

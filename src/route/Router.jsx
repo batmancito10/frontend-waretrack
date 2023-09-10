@@ -5,7 +5,6 @@ import Logout from '../components/utils/Logout';
 import App from '../App';
 import Dashboard from '../pages/views/Dashboard'
 import Usuarios from '../pages/views/Usuarios'
-import Profile from '../pages/views/Profile'
 import Notfound from '../components/utils/Notfound'
 import RouteProtector from '../components/utils/RouteProtector'
 
@@ -22,7 +21,6 @@ function Router () {
                         <Route path="dashboard" element={<Dashboard />}/>
                         <Route path="usuarios" element={<Usuarios />}/>
                         <Route index element={<Dashboard />}/>
-                        <Route path="profile" element={<Profile />}/>
                     </Route>
                     <Route path="*" element={<Notfound />}/>
                 </Route>

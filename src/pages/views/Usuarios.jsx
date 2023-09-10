@@ -2,13 +2,15 @@ import { useState, useContext, useEffect } from "react";
 import DataTable from 'react-data-table-component';
 import { PageTitle } from '../../App'
 import AgregarUsuario from '../../components/modals/users/AgregarUsuario'
+import EditarUsuario from '../../components/modals/users/EditarUsuario'
 
 
 function Usuarios () {
     const [usuarios, setUsuarios] = useState([])
     const [agregarUsuarioModal, setAgregarUsuarioModal] = useState(false)
+    const [editarUsuarioModal, setEditarUsuarioModal] = useState(false)
     const [dataReceived, setDataReceived] = useState(false)
-    const [updateUsuario, setUpdateUsuario] = useState(null)
+    const [editarUsuario, setEditarUsuario] = useState(null)    
     const {setTitle} = useContext(PageTitle);
     const accessToken = localStorage.getItem('accessToken');
     
@@ -30,7 +32,7 @@ function Usuarios () {
         },
         {
             name: 'Sede',
-            selector: row => row.sede,
+            selector: row => row.sede[0]["nombre"],
             sortable: true
         },
         {
@@ -40,10 +42,11 @@ function Usuarios () {
         {   
             name: 'Acciones',
             cell: row => {
+
                 return (
                 <div className="App d-flex justify-content-center pt-3 pb-0">
                     <div className="btn-group">
-                        <button className="btn btn-outline-secondary py-2 px-3" onClick={() => updateUser(row)}>
+                        <button className="btn btn-outline-secondary py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-editar-usuario" onClick={() => updateUser(row)}>
                             <i className="bi bi-pencil fs-5"></i>
                         </button>
                         <button className="btn btn-outline-secondary py-2 px-3" onClick={() => deleteUser(row)}>
@@ -54,16 +57,34 @@ function Usuarios () {
             )}
         }
     ]
-    
-    
+
     const usersRequest = async () => {
-        const response = await fetch('https://waretrack-api.onrender.com/funcionario/', {
+        const response = await fetch(import.meta.env.VITE_FUNCIONARIO, {
             mode: 'cors',
             method: 'get',
             headers: {'Authorization': `Bearer ${accessToken}`}
         })
         const jsonResponse = await response.json()
         return jsonResponse
+    }
+
+    const sedeRequest = async () => {
+        const response = await fetch(import.meta.env.VITE_SEDE, {
+            mode: 'cors',
+            method: 'get',
+            headers: {'Authorization': `Bearer ${accessToken}`}
+        })
+        const jsonResponse = await response.json()
+        return jsonResponse
+    }
+
+    const updateUser = (usuario) => {
+        setEditarUsuario(usuario)
+        setEditarUsuarioModal(true)
+    }
+
+    const deleteUser = (usuario) => {
+        console.log(usuario);
     }
     
     useEffect(() => {
@@ -75,14 +96,6 @@ function Usuarios () {
         })
     }, [dataReceived])
     
-    const updateUser = (usuario) => {
-        setUpdateUsuario(usuario)
-        console.log(updateUsuario);
-    }
-
-    const deleteUser = (usuario) => {
-        console.log(usuario);
-    }
 
     return <>
     <div className="row">
@@ -91,7 +104,7 @@ function Usuarios () {
                 <div className="card-header pb-0 d-flex justify-content-between" >
                     <h6>Usuarios</h6>
                     <button className="btn btn-secondary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#modal-agregar-usuario" onClick={() => setAgregarUsuarioModal(true)}>
-                    <i class="bi bi-person-add fs-5 py-0"></i>
+                    <i className="bi bi-person-add fs-5 py-0"></i>
                          Agregar usuario 
                     </button>
                 </div>
@@ -109,7 +122,8 @@ function Usuarios () {
             </div>
         </div>
     </div>
-    <AgregarUsuario agregarUsuarioModal={agregarUsuarioModal} setDataParent={setDataReceived}/>
+    <AgregarUsuario agregarUsuarioModal={agregarUsuarioModal} setDataParent={setDataReceived} sedeRequest={sedeRequest}/>
+    <EditarUsuario editarUsuarioModal={editarUsuarioModal} setEditarUsuarioModal={setEditarUsuarioModal} setDataParent={setDataReceived} usuario={editarUsuario === null ? {} : editarUsuario} sedeRequest={sedeRequest}/>
     </>
 }
 
