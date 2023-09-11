@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import FormUsuario from "./FormUsuario";
 import './FormularioUsuario.css'
 
-function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest, setEditarUsuarioModal}){
-    const [sedes, setSedes] = useState('')
+function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest, sedes, setSedes}){
     const [dataReceived, setDataReceived] = useState(false)
     const accessToken = localStorage.getItem('accessToken');
 
@@ -30,7 +29,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
 
         const response = await fetch(`${import.meta.env.VITE_FUNCIONARIO}${usuario["id"]}/`, {
             mode: 'cors',
-            method: 'patch',
+            method: 'PATCH',
             headers: {'Authorization': `Bearer ${accessToken}`, 'Content-type': 'application/json'},
             body: JSON.stringify({
                 ...values,
@@ -40,8 +39,8 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
             })
         })
 
-        if(response.status !== 201) {
-            throw new Error('Ha habido un error, intente nuevamente')
+        if(response.status !== 200) {
+            throw new Error(' Error al realizar acción, intente nuevamente.')
         }
 
         return response
@@ -49,10 +48,9 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
 
     const editUser = (e) => {
         e.preventDefault()
-        document.querySelector('#closeAgregarUsuario').click()
         editarUsuario()
             .then((response) => {
-                document.querySelector('#closeAgregarUsuario').click()
+                document.querySelector('#closeEditarUsuario').click()
                 setDataParent(false)
             })
             .catch((e) => alert(e))
@@ -70,27 +68,30 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
             groups: [],
             sede: '',
         })
-        setEditarUsuarioModal(false)
     }
 
     useEffect(() => {
-        if(editarUsuarioModal){
+        if(editarUsuarioModal && sedes === ''){
             sedeRequest()
                 .then((data) => {
                     setSedes(data)
                     setDataReceived(true)
                 }) 
-                setValues({
-                    ...values,
-                    password: '',
-                    first_name: usuario["first_name"],
-                    last_name: usuario["last_name"],
-                    email: usuario["email"],
-                    salario: usuario["salario"] === null ? 0 : usuario["salario"],
-                    cargo: usuario["cargo"] === null ? '' : usuario["cargo"],
-                    groups: usuario["groups"],
-                    sede: usuario["sede"][0]["id"],
-                })
+            } else if (editarUsuarioModal) {
+                setDataReceived(true)
+            }
+        if(usuario !== null) {
+            setValues({
+                ...values,
+                password: '',
+                first_name: usuario["first_name"],
+                last_name: usuario["last_name"],
+                email: usuario["email"],
+                salario: usuario["salario"] === null ? 0 : usuario["salario"],
+                cargo: usuario["cargo"] === null ? '' : usuario["cargo"],
+                groups: usuario["groups"],
+                sede: usuario["sede"][0]["id"],
+            })
         }
     }, [editarUsuarioModal, usuario])
 

@@ -121,7 +121,9 @@ function Login () {
                         >
                             Ingresar
                         </button>
-                        {/* <Link to="/" className='btn bg-gradient-info w-100 mt-4 mb-0'>Ingresar</Link> */}
+                        <button>
+                            
+                        </button>
                         </div>
                     </form>
                     </div>

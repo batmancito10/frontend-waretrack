@@ -2,9 +2,7 @@ import { useState, useEffect } from "react"
 import FormUsuario from './FormUsuario'
 import './FormularioUsuario.css'
 
-function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest}) {
-
-    const [sedes, setSedes] = useState('')
+function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes, setSedes}) {
     const [dataReceived, setDataReceived] = useState(false)
     const accessToken = localStorage.getItem('accessToken');
 
@@ -40,7 +38,7 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest}) {
         })
 
         if(response.status !== 201) {
-            throw new Error('Ha habido un error, intente nuevamente')
+            throw new Error(' Error al realizar acción, intente nuevamente.')
         }
 
         return response
@@ -71,12 +69,14 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest}) {
     }
 
     useEffect(() => {
-        if(agregarUsuarioModal){
+        if(agregarUsuarioModal && sedes === ''){
             sedeRequest()
                 .then((data) => {
                     setSedes(data)
                     setDataReceived(true)
                 }) 
+        } else if (agregarUsuarioModal) {
+            setDataReceived(true)
         }
     }, [agregarUsuarioModal])
 
@@ -94,7 +94,7 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest}) {
                         <div className="card card-footer">
                             <div className="d-flex justify-content-end gap-2">
                                 <button className="btn btn-secondary" type="button" data-bs-dismiss="modal" id="closeAgregarUsuario" onClick={limpiarFormulario}>Cancelar</button>
-                                <button className="btn btn-primary" type="submit" /* onClick={(e) => addUser(e)} */ form="AgregarUsuario">Agregar</button>
+                                <button className="btn btn-primary" type="submit" form="AgregarUsuario">Agregar</button>
                             </div>
                         </div>
                     </div>

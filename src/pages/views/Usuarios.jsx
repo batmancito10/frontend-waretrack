@@ -3,6 +3,7 @@ import DataTable from 'react-data-table-component';
 import { PageTitle } from '../../App'
 import AgregarUsuario from '../../components/modals/users/AgregarUsuario'
 import EditarUsuario from '../../components/modals/users/EditarUsuario'
+import EliminarUsuario from "../../components/modals/users/EliminarUsuario";
 
 
 function Usuarios () {
@@ -11,8 +12,11 @@ function Usuarios () {
     const [editarUsuarioModal, setEditarUsuarioModal] = useState(false)
     const [dataReceived, setDataReceived] = useState(false)
     const [editarUsuario, setEditarUsuario] = useState(null)    
-    const {setTitle} = useContext(PageTitle);
-    const accessToken = localStorage.getItem('accessToken');
+    const [eliminarUsuario, setEliminarUsuario] = useState(null)
+    const [sedes, setSedes] = useState('')
+    const {setTitle} = useContext(PageTitle)
+    const accessToken = localStorage.getItem('accessToken')
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
     
     const columns = [
         {
@@ -49,9 +53,10 @@ function Usuarios () {
                         <button className="btn btn-outline-secondary py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-editar-usuario" onClick={() => updateUser(row)}>
                             <i className="bi bi-pencil fs-5"></i>
                         </button>
-                        <button className="btn btn-outline-secondary py-2 px-3" onClick={() => deleteUser(row)}>
-                            <i className="bi bi-trash fs-5"></i>
-                        </button>
+                        {(userInfo["id"] !== row.id) &&
+                            <button className="btn btn-outline-secondary py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-eliminar-usuario" onClick={() => deleteUser(row)}>
+                                <i className="bi bi-trash fs-5"></i>
+                            </button>}
                     </div>
                 </div>
             )}
@@ -84,7 +89,7 @@ function Usuarios () {
     }
 
     const deleteUser = (usuario) => {
-        console.log(usuario);
+        setEliminarUsuario(usuario)
     }
     
     useEffect(() => {
@@ -122,8 +127,9 @@ function Usuarios () {
             </div>
         </div>
     </div>
-    <AgregarUsuario agregarUsuarioModal={agregarUsuarioModal} setDataParent={setDataReceived} sedeRequest={sedeRequest}/>
-    <EditarUsuario editarUsuarioModal={editarUsuarioModal} setEditarUsuarioModal={setEditarUsuarioModal} setDataParent={setDataReceived} usuario={editarUsuario === null ? {} : editarUsuario} sedeRequest={sedeRequest}/>
+    <AgregarUsuario agregarUsuarioModal={agregarUsuarioModal} setDataParent={setDataReceived} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes}/>
+    <EditarUsuario editarUsuarioModal={editarUsuarioModal} setDataParent={setDataReceived} usuario={editarUsuario} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes}/>
+    <EliminarUsuario usuario={eliminarUsuario} setDataParent={setDataReceived}/>
     </>
 }
 
