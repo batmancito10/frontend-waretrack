@@ -22,7 +22,10 @@ function EliminarUsuario ({ usuario, setDataParent }) {
             })
     }
 
-    return <div className="modal fade" id="modal-eliminar-usuario" tabIndex="-1" role="dialog" aria-labelledby="modal-eliminar-usuario" aria-hidden="true">
+    return (
+    usuario === null ? <></> :
+    
+    <div className="modal fade" id="modal-eliminar-usuario" tabIndex="-1" role="dialog" aria-labelledby="modal-eliminar-usuario" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div className="modal-content">
                 <div className="modal-body p-0">
@@ -51,7 +54,7 @@ function EliminarUsuario ({ usuario, setDataParent }) {
                 </div>
             </div>
         </div>
-    </div>
+    </div>)
     
 }
 
