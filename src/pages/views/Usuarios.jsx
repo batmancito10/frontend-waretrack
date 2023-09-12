@@ -10,6 +10,7 @@ function Usuarios () {
     const [usuarios, setUsuarios] = useState([])
     const [agregarUsuarioModal, setAgregarUsuarioModal] = useState(false)
     const [editarUsuarioModal, setEditarUsuarioModal] = useState(false)
+    const [eliminarUsuarioModal, setEliminarUsuarioModal] = useState(false)
     const [dataReceived, setDataReceived] = useState(false)
     const [editarUsuario, setEditarUsuario] = useState(null)    
     const [eliminarUsuario, setEliminarUsuario] = useState(null)
@@ -90,6 +91,7 @@ function Usuarios () {
 
     const deleteUser = (usuario) => {
         setEliminarUsuario(usuario)
+        setEliminarUsuarioModal(true)
     }
     
     useEffect(() => {
@@ -129,7 +131,7 @@ function Usuarios () {
     </div>
     <AgregarUsuario agregarUsuarioModal={agregarUsuarioModal} setDataParent={setDataReceived} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes}/>
     <EditarUsuario editarUsuarioModal={editarUsuarioModal} setDataParent={setDataReceived} usuario={editarUsuario} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes}/>
-    <EliminarUsuario usuario={eliminarUsuario} setDataParent={setDataReceived}/>
+    <EliminarUsuario usuario={eliminarUsuario} setDataParent={setDataReceived} eliminarUsuarioModal={eliminarUsuarioModal}/>
     </>
 }
 
