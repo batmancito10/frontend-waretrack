@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useGoogleLogin } from '@react-oauth/google'
 
 function Login () {
     const [user, setUser] = useState('');
@@ -39,6 +40,11 @@ function Login () {
         });
         
     }
+
+    const iniciarSesionGoogle = useGoogleLogin({
+        onSuccess: (response) => console.log(response),
+        onError: (response) => console.log(response)
+    })
 
     return <>
     <div className="container position-sticky z-index-sticky top-0">
@@ -117,12 +123,13 @@ function Login () {
                         <div className="text-center">
                         <button
                             type="submit"
-                            className="btn bg-gradient-info w-100 mt-4 mb-0"
+                            className="btn bg-gradient-info w-100 mt-4 mb-3"
                         >
                             Ingresar
                         </button>
-                        <button>
-                            
+                        <button type="button" className='btn btn-outline w-100 d-flex gap-2 justify-content-center align-items-center' onClick={iniciarSesionGoogle}>
+                            <img src="/src/assets/img/logos/Google__G__Logo.png" alt="" />
+                            Inicia sesión con Google
                         </button>
                         </div>
                     </form>

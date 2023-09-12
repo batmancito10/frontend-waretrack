@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import Navbar from './components/Navbar'
@@ -6,7 +6,22 @@ import Sidebar from './components/Sidebar'
 
 export const PageTitle = createContext()
 
+
+
 function App() {
+  useEffect(() => {
+    const script = document.createElement('script');
+  
+    script.src = "./src/assets/js/soft-ui-dashboard.js";
+    script.async = true;
+  
+    document.body.appendChild(script);
+  
+    return () => {
+      document.body.removeChild(script);
+    }
+  }, []);
+
   const [title, setTitle] = useState('');
 
   return (

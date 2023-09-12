@@ -11,6 +11,21 @@ function Navbar () {
             <li>
                 <Link to="/logout" >Cerrar sesión</Link>
             </li>
+            <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
+                <a
+                    href=""
+                    className="nav-link text-body p-0"
+                    id="iconNavbarSidenav"
+                    onClick={(e) => e.preventDefault()}
+                >
+                    <div className="sidenav-toggler-inner">
+                    <i className="sidenav-toggler-line" />
+                    <i className="sidenav-toggler-line" />
+                    <i className="sidenav-toggler-line" />
+                    </div>
+                </a>
+            </li>
+
         </ul>
     </nav>
 }

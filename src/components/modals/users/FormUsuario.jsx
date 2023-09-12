@@ -67,14 +67,13 @@ function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit})
             <div className="col-md-6">
                 <div className="d-flex gap-2 align-items-center justify-content-between">
                     <label htmlFor={`${id}Cargo`} className="fs-6 pt-1">Cargo</label>
-                    <select value={values["cargo"]} name="cargo" id={`${id}Cargo`} className="form-select w-65" onChange={inputHandler("cargo")}>
-                        <option value="">Selecciona una opción</option>
-                        
-                    </select>
+                    <input type="text" value={values["cargo"]} name="cargo" id={`${id}Cargo`} className="form-control w-65" onChange={inputHandler("cargo")}/>
                 </div>
             </div>
             <div className="col-md-6">
-                
+                <div className="d-flex gap-2 align-items-center justify-content-between">
+                    <label htmlFor={`${id}Groups`} className="fs-6 pt-1">Grupos</label>
+                </div>
             </div>
         </div>
     </form>
