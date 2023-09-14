@@ -1,4 +1,12 @@
-function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit}) {
+import { useEffect, useState } from 'react'
+import Select from 'react-select'
+
+function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit, groups, setValues, setDataReceived, editarUsuarioModal, setEditarUsuarioModal}) {
+
+    const [groupList, setGroupList] = useState('')
+    const [sedeList, setSedeList] = useState('')
+    const [sedeSelected, setSedeSelected] = useState([])
+    const [groupSelected, setGroupSelected] = useState([])
     
     const togglePassword = () => {
         const togglePassButton = document.querySelector(`#${id}PasswordButton`)
@@ -7,6 +15,54 @@ function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit})
         passwordInput.setAttribute('type', type)
         togglePassButton.querySelector('i').classList.toggle('bi-eye')
     }
+
+    useEffect(() => {
+        if(groups !== undefined && groups.hasOwnProperty(0)){
+            setGroupList(groups.map((group) => {
+                return {value: group['id'], label: group['name']}
+            })) 
+        }
+        if(sedes !== undefined && sedes.hasOwnProperty(0)){
+            setSedeList(sedes.map((sede) => {
+                return {value: sede['id'], label: sede['nombre']}
+            })) 
+            setDataReceived(true)
+        }
+        if(values["sede"][0] !== undefined && editarUsuarioModal){
+            console.log(values);
+            setSedeSelected(values["sede"].map((sede) => {
+                return {value: sede["id"], label: sede["nombre"]}
+            }))
+            setGroupSelected(values["groups"].map((group) => {
+                return {value: group["id"], label: group["name"]}
+            }))
+            setEditarUsuarioModal(false)
+        }
+    }, [groups, editarUsuarioModal, values])
+
+    useEffect(() => {
+        if(values["sede"] === '' & values["groups"] === []){
+            setSedeSelected([])
+            setGroupSelected([])
+            if(editarUsuarioModal){
+                setDataReceived(false)
+            }
+        }
+    }, [values])
+
+    const changeGroups = (selectedOption) => {
+        setGroupSelected(selectedOption)
+        const groupData = selectedOption.map((option) => {
+            return option.value
+        })
+        setValues({...values, ["groups"]: groupData})
+    }
+    const changeSedes = (selectedOption) => {
+        setSedeSelected(selectedOption)
+        const sedeData = selectedOption.value
+        setValues({...values, ["sede"]: [sedeData]})
+    }
+
 
     return <form role="form text-left" id={`${id}Usuario`} onSubmit={onSubmit}>
         <div className="row mb-3">
@@ -46,14 +102,18 @@ function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit})
             <div className="col-md-6">
                 <div className="d-flex gap-2 align-items-center justify-content-between">
                     <label htmlFor={`${id}Sede`} className="fs-6 pt-1">Sede</label>
-                    <select value={values["sede"]} name="sede" id={`${id}Sede`} className="form-select w-65" required onChange={inputHandler("sede")}>
-                        <option value="">Selecciona una opción</option>
-                        {dataReceived ? 
-                            sedes.map((sede) => {
-                                return <option key={sede["id"]} value={sede["id"]}>{sede["nombre"]}</option>
-                            })
-                        : <option value="">Loading...</option>}
-                    </select>
+                    {dataReceived ? <Select 
+                        name='sedes'
+                        options={sedeList}
+                        id={`${id}Sede`}
+                        className='w-65'
+                        onChange={changeSedes}
+                        isSearchable={false}
+                        value={sedeSelected}
+                    /> : 
+                    <select className='form-select w-65'>
+                        <option value="">Loading...</option>    
+                    </select>}
                 </div>
             </div>
             <div className="col-md-6">
@@ -72,7 +132,20 @@ function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit})
             </div>
             <div className="col-md-6">
                 <div className="d-flex gap-2 align-items-center justify-content-between">
-                    <label htmlFor={`${id}Groups`} className="fs-6 pt-1">Grupos</label>
+                    <label className="fs-6 pt-1">Grupos</label>
+                    {dataReceived ? <Select 
+                        isMulti
+                        name='groups'
+                        options={groupList}
+                        id={`${id}Groups`}
+                        className='w-65'
+                        onChange={changeGroups}
+                        isSearchable={false}
+                        value={groupSelected}
+                    /> : 
+                    <select className='form-select w-65'>
+                        <option value="">Loading...</option>    
+                    </select>}
                 </div>
             </div>
         </div>

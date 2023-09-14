@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import FormUsuario from './FormUsuario'
 import './FormularioUsuario.css'
 
-function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes, setSedes}) {
+function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes, setSedes, groups, setGroups, groupRequest}) {
     const [dataReceived, setDataReceived] = useState(false)
     const accessToken = localStorage.getItem('accessToken');
 
@@ -31,7 +31,6 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes
             headers: {'Authorization': `Bearer ${accessToken}`, 'Content-type': 'application/json'},
             body: JSON.stringify({
                 ...values,
-                sede: [values.sede],
                 salario: Number(values.salario),
                 cargo: values.cargo === '' ? null : values.cargo
             })
@@ -52,6 +51,7 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes
                 setDataParent(false)
             })
             .catch((e) => alert(e))
+            console.log(values);
     }
 
     const limpiarFormulario = () => {
@@ -73,10 +73,12 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes
             sedeRequest()
                 .then((data) => {
                     setSedes(data)
-                    setDataReceived(true)
+                    groupRequest()
+                        .then((data) => {
+                            setGroups(data)
+                            //setDataReceived(true)
+                        })
                 }) 
-        } else if (agregarUsuarioModal) {
-            setDataReceived(true)
         }
     }, [agregarUsuarioModal])
 
@@ -89,7 +91,7 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes
                             <h3 className="font-weight-bolder">Agregar Usuario</h3>
                         </div>
                         <div className="card-body p-4 ">
-                            <FormUsuario values={values} inputHandler={inputHandler} sedes={sedes} dataReceived={dataReceived} id={'Agregar'} onSubmit={addUser}/>
+                            <FormUsuario values={values} inputHandler={inputHandler} sedes={sedes} dataReceived={dataReceived} id={'Agregar'} onSubmit={addUser} groups={groups} setValues={setValues} setDataReceived={setDataReceived} editarUsuarioModal={false}/>
                         </div>
                         <div className="card card-footer">
                             <div className="d-flex justify-content-end gap-2">

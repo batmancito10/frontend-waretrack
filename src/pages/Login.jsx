@@ -42,7 +42,28 @@ function Login () {
     }
 
     const iniciarSesionGoogle = useGoogleLogin({
-        onSuccess: (response) => console.log(response),
+        onSuccess: async (response) => {
+            const responseInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                method: 'get',
+                mode: 'cors',
+                headers: {'Authorization': `Bearer ${response.access_token}`}
+            })
+            const userInfo = await responseInfo.json()
+            console.log(userInfo);
+            const apiResponse = await fetch(import.meta.env.VITE_TOKEN_GOOGLE , {
+                method: 'post',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify({
+                    'email': userInfo.email,
+                    'token_google': response.access_token
+                })
+            })
+            const apiResponseData = await apiResponse.json()
+            localStorage.setItem('accessToken', apiResponseData.access);
+            localStorage.setItem('refreshToken', apiResponseData.refresh);
+            localStorage.setItem('userInfo', JSON.stringify(apiResponseData.user));
+            navigate('/')
+        },
         onError: (response) => console.log(response)
     })
 

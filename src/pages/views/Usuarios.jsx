@@ -15,6 +15,7 @@ function Usuarios () {
     const [editarUsuario, setEditarUsuario] = useState(null)    
     const [eliminarUsuario, setEliminarUsuario] = useState(null)
     const [sedes, setSedes] = useState('')
+    const [groups, setGroups] = useState('')
     const {setTitle} = useContext(PageTitle)
     const accessToken = localStorage.getItem('accessToken')
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -36,8 +37,16 @@ function Usuarios () {
             sortable: true
         },
         {
+            name: 'Grupos',
+            selector: row => {
+                return row.groups.map((group) => group['name']).join(' ')
+            },
+        },
+        {
             name: 'Sede',
-            selector: row => row.sede[0]["nombre"],
+            selector: row =>  {
+                return row.sede.map((sede) => sede['nombre']).join(' ')
+            },
             sortable: true
         },
         {
@@ -84,7 +93,18 @@ function Usuarios () {
         return jsonResponse
     }
 
+    const groupRequest = async () => {
+        const response = await fetch(import.meta.env.VITE_GROUPS, {
+            mode: 'cors',
+            method: 'get',
+            headers: {'Authorization': `Bearer ${accessToken}`}
+        })
+        const jsonResponse = await response.json()
+        return jsonResponse
+    }
+
     const updateUser = (usuario) => {
+        //console.log(usuario.groups[0]);
         setEditarUsuario(usuario)
         setEditarUsuarioModal(true)
     }
@@ -129,8 +149,8 @@ function Usuarios () {
             </div>
         </div>
     </div>
-    <AgregarUsuario agregarUsuarioModal={agregarUsuarioModal} setDataParent={setDataReceived} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes}/>
-    <EditarUsuario editarUsuarioModal={editarUsuarioModal} setDataParent={setDataReceived} usuario={editarUsuario} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes}/>
+    <AgregarUsuario agregarUsuarioModal={agregarUsuarioModal} setDataParent={setDataReceived} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes} groups={groups} setGroups={setGroups} groupRequest={groupRequest}/>
+    <EditarUsuario editarUsuarioModal={editarUsuarioModal} setDataParent={setDataReceived} usuario={editarUsuario} sedeRequest={sedeRequest} sedes={sedes} setSedes={setSedes} groups={groups} setGroups={setGroups} groupRequest={groupRequest} setEditarUsuarioModal={setEditarUsuarioModal}/>
     <EliminarUsuario usuario={eliminarUsuario} setDataParent={setDataReceived} eliminarUsuarioModal={eliminarUsuarioModal}/>
     </>
 }

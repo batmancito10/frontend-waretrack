@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import FormUsuario from "./FormUsuario";
 import './FormularioUsuario.css'
 
-function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest, sedes, setSedes}){
+function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest, sedes, setSedes, groups, setGroups, groupRequest, setEditarUsuarioModal}){
     const [dataReceived, setDataReceived] = useState(false)
     const accessToken = localStorage.getItem('accessToken');
 
@@ -26,6 +26,10 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
 
     const editarUsuario = async () => {
         if(values["password"] === '') delete values["password"]
+        if(values["sede"] === usuario["sede"]) {
+            values["sede"] = [usuario["sede"][0]["id"]]
+        }
+        
 
         const response = await fetch(`${import.meta.env.VITE_FUNCIONARIO}${usuario["id"]}/`, {
             mode: 'cors',
@@ -33,7 +37,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
             headers: {'Authorization': `Bearer ${accessToken}`, 'Content-type': 'application/json'},
             body: JSON.stringify({
                 ...values,
-                sede: [values.sede],
+                
                 salario: Number(values.salario),
                 cargo: values.cargo === '' ? null : values.cargo
             })
@@ -54,6 +58,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
                 setDataParent(false)
             })
             .catch((e) => alert(e))
+            
     }
 
     const limpiarFormulario = () => {
@@ -68,6 +73,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
             groups: [],
             sede: '',
         })
+        setEditarUsuarioModal(false)
     }
 
     useEffect(() => {
@@ -75,11 +81,13 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
             sedeRequest()
                 .then((data) => {
                     setSedes(data)
-                    setDataReceived(true)
+                    groupRequest()
+                        .then((data) => {
+                            setGroups(data)
+                            //setDataReceived(true)
+                        })
                 }) 
-            } else if (editarUsuarioModal) {
-                setDataReceived(true)
-            }
+            } 
         if(usuario !== null) {
             setValues({
                 ...values,
@@ -90,7 +98,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
                 salario: usuario["salario"] === null ? 0 : usuario["salario"],
                 cargo: usuario["cargo"] === null ? '' : usuario["cargo"],
                 groups: usuario["groups"],
-                sede: usuario["sede"][0]["id"],
+                sede: usuario["sede"]
             })
         }
     }, [editarUsuarioModal, usuario])
@@ -104,7 +112,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
                             <h3 className="font-weight-bolder">Editar Usuario</h3>
                         </div>
                         <div className="card-body p-4 ">
-                            <FormUsuario values={values} inputHandler={inputHandler} sedes={sedes} dataReceived={dataReceived} id={'Editar'} onSubmit={editUser}/>
+                            <FormUsuario values={values} inputHandler={inputHandler} sedes={sedes} dataReceived={dataReceived} id={'Editar'} onSubmit={editUser} groups={groups} setValues={setValues} setDataReceived={setDataReceived} editarUsuarioModal={editarUsuarioModal} setEditarUsuarioModal={setEditarUsuarioModal}/>
                         </div>
                         <div className="card card-footer">
                             <div className="d-flex justify-content-end gap-2">
