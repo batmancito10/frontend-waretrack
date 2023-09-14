@@ -384,7 +384,7 @@ const iconNavbarSidenav = document.getElementById('iconNavbarSidenav');
 const iconSidenav = document.getElementById('iconSidenav');
 const sidenav = document.getElementById('sidenav-main');
 let body = document.getElementsByTagName('body')[0];
-
+console.log('Script cargado');
 
 console.log();
 let className = 'g-sidenav-pinned';
