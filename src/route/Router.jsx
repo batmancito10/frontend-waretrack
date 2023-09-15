@@ -5,6 +5,7 @@ import Logout from '../components/utils/Logout';
 import App from '../App';
 import Dashboard from '../pages/views/Dashboard'
 import Usuarios from '../pages/views/Usuarios'
+import PedidosProveedores from '../pages/views/PedidosProveedores'
 import Notfound from '../components/utils/Notfound'
 import RouteProtector from '../components/utils/RouteProtector'
 
@@ -20,6 +21,7 @@ function Router () {
                     <Route path="/" element={<App />} exact>
                         <Route path="dashboard" element={<Dashboard />}/>
                         <Route path="usuarios" element={<Usuarios />}/>
+                        <Route path="pedidos-proveedores"  element={<PedidosProveedores />}/>
                         <Route index element={<Dashboard />}/>
                     </Route>
                     <Route path="*" element={<Notfound />}/>
