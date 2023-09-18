@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
+// import Loader from '../components/Loader.jsx'
 
 function Login () {
     const [user, setUser] = useState('');
@@ -142,10 +143,7 @@ function Login () {
                         </label>
                         </div>
                         <div className="text-center">
-                        <button
-                            type="submit"
-                            className="btn bg-gradient-info w-100 mt-4 mb-3"
-                        >
+                        <button type="submit" className="btn bg-gradient-info w-100 mt-4 mb-3">
                             Ingresar
                         </button>
                         <button type="button" className='btn btn-outline w-100 d-flex gap-2 justify-content-center align-items-center' onClick={iniciarSesionGoogle}>
