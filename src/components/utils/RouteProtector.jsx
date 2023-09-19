@@ -11,7 +11,7 @@ function RouteProtector ({ redirectPath = '/login' }) {
     
     
     const checkToken = async (sessionToken) => {
-        const response = await fetch('https://waretrack-api.onrender.com/token/verify/', {
+        const response = await fetch(import.meta.env.VITE_TOKEN_VERIFY, {
             mode: 'cors',
             method: 'post',
             headers: {

@@ -11,7 +11,7 @@ function Logout () {
     }
 
     const logoutRequest = async () => {
-        const response = await fetch('https://waretrack-api.onrender.com/token/', {
+        const response = await fetch(import.meta.env.VITE_TOKEN, {
             mode: 'cors',
             method: 'delete',
         })
