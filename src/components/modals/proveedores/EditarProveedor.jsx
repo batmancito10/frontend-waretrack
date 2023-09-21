@@ -29,7 +29,7 @@ function EditarProveedor({ idProveedor, inputBloqueado }) {
             }).catch((error) => {
                 console.error('Hubo un error al obtener las opciones:', error);
             });
-    }, [])
+    }, [setTitle])
 
 
     useEffect(() => {
@@ -54,7 +54,7 @@ function EditarProveedor({ idProveedor, inputBloqueado }) {
             }).catch((error) => {
                 console.error('Hubo un error al obtener los datos del proveedor:', error);
             });
-    }, [])
+    }, [setTitle])
 
     const [values, setValues] = useState([])
     const handleChange = (selectedOption) => {
@@ -196,7 +196,6 @@ function EditarProveedor({ idProveedor, inputBloqueado }) {
                         </div>
                         {!inputBloqueado ? <div className="card card-footer">
                             <div className="d-flex justify-content-end gap-2">
-                                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal" id="closeEditarUsuario">Cancelar</button>
                                 <button className="btn btn-primary" type="submit" form="editarProveedor">Editar</button>
                             </div>
                         </div> : null}

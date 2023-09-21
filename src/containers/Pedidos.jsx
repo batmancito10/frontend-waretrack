@@ -52,7 +52,7 @@ function Pedidos() {
             .then((data) => {
                 setPedidos(data);
             })
-    }, [])
+    }, [setTitle])
 
     function fechaHora(fechaAPI) {
         const fecha = fechaAPI.split('T')[0]
@@ -81,8 +81,8 @@ function Pedidos() {
                                         <span className="text-xs">Estado: <span className="text-dark ms-sm-2 font-weight-bold">{pedido.estado === false ? "False" : "True"}</span></span>
                                     </div>
                                     <div className="ms-auto text-end">
-                                        <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="#"><i className="far fa-trash-alt me-2"></i>Delete</a>
-                                        <a className="btn btn-link text-dark px-3 mb-0" href="#"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                                        <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="#"><i className="far fa-trash-alt me-2"></i>Eliminar</a>
+                                        <a className="btn btn-link text-dark px-3 mb-0" href="#"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Editar</a>
                                     </div>
                                 </li>
                             }) : <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
@@ -93,8 +93,8 @@ function Pedidos() {
                                     <span className="text-xs">Productos: <span className="text-dark ms-sm-2 font-weight-bold">Loading data...</span></span>
                                 </div>
                                 <div className="ms-auto text-end">
-                                    <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="#"><i className="far fa-trash-alt me-2"></i>Delete</a>
-                                    <a className="btn btn-link text-dark px-3 mb-0" href="#"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                                    <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="#"><i className="far fa-trash-alt me-2"></i>Eliminar</a>
+                                    <a className="btn btn-link text-dark px-3 mb-0" href="#"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Editar</a>
                                 </div>
                             </li>
                             }
