@@ -8,6 +8,7 @@ import Usuarios from '../pages/views/Usuarios'
 import PedidosProveedores from '../pages/views/PedidosProveedores'
 import Notfound from '../components/utils/Notfound'
 import RouteProtector from '../components/utils/RouteProtector'
+import PerfilProveedor from "../pages/views/perfilProveedor";
 
 function Router () {
 
@@ -22,6 +23,7 @@ function Router () {
                         <Route path="dashboard" element={<Dashboard />}/>
                         <Route path="usuarios" element={<Usuarios />}/>
                         <Route path="pedidos-proveedores"  element={<PedidosProveedores />}/>
+                        <Route path="detalle-proveedor"  element={<PerfilProveedor />}/>
                         <Route index element={<Dashboard />}/>
                     </Route>
                     <Route path="*" element={<Notfound />}/>

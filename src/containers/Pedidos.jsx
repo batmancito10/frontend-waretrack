@@ -3,7 +3,6 @@ import { PageTitle } from '../App'
 
 function Pedidos() {
     const [pedidos, setPedidos] = useState([])
-    const [dataReceived, setDataReceived] = useState(false)
     const accessToken = localStorage.getItem('accessToken')
     const { setTitle } = useContext(PageTitle)
 
@@ -16,17 +15,17 @@ function Pedidos() {
         const jsonResponse = await response.json()
 
         const PedidosInfo = await Promise.all(jsonResponse.map(async (pedido) => {
-            const sedeResponse = await fetch(`${import.meta.env.VITE_SEDE}${pedido.sede}`, {
+            const sedeResponse = await fetch(`${import.meta.env.VITE_SEDE}${pedido.sede}/`, {
                 mode: 'cors',
                 method: 'get',
                 headers: { 'Authorization': `Bearer ${accessToken}` }
             });
-            const funcionarioResponse = await fetch(`${import.meta.env.VITE_FUNCIONARIO}${pedido.funcionario}`, {
+            const funcionarioResponse = await fetch(`${import.meta.env.VITE_FUNCIONARIO}${pedido.funcionario}/`, {
                 mode: 'cors',
                 method: 'get',
                 headers: { 'Authorization': `Bearer ${accessToken}` }
             })
-            const proveedorResponse = await fetch(`${import.meta.env.VITE_PROVEEDOR}${pedido.proveedor}`, {
+            const proveedorResponse = await fetch(`${import.meta.env.VITE_PROVEEDOR}${pedido.proveedor}/`, {
                 mode: 'cors',
                 method: 'get',
                 headers: { 'Authorization': `Bearer ${accessToken}` }
@@ -52,14 +51,16 @@ function Pedidos() {
         pedidosRequest()
             .then((data) => {
                 setPedidos(data);
-                setDataReceived(true);
             })
-    }, [dataReceived])
+    }, [])
 
     function fechaHora(fechaAPI) {
         const fecha = fechaAPI.split('T')[0]
         return fecha;
     }
+
+
+    
 
 
     return <>
@@ -71,32 +72,32 @@ function Pedidos() {
                     </div>
                     <div className="card-body pt-4 p-3">
                         <ul className="list-group">
-
-                            {dataReceived ? pedidos.map(pedido => {
+                            {pedidos ? pedidos.map(pedido => {
                                 return <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg" key={pedido.id}>
                                     <div className="d-flex flex-column">
                                         <h6 className="mb-3 text-sm">{pedido.proveedor.nombre}</h6>
                                         <span className="mb-2 text-xs">Sede destino: <span className="text-dark font-weight-bold ms-sm-2">{pedido.sede.nombre}</span></span>
                                         <span className="mb-2 text-xs">Fecha realizado: <span className="text-dark ms-sm-2 font-weight-bold">{fechaHora(pedido.fecha_realizado)}</span></span>
-                                        <span className="text-xs">Productos: <span className="text-dark ms-sm-2 font-weight-bold">Aquí falta listar prods</span></span>
+                                        <span className="text-xs">Estado: <span className="text-dark ms-sm-2 font-weight-bold">{pedido.estado === false ? "False" : "True"}</span></span>
                                     </div>
                                     <div className="ms-auto text-end">
-                                        <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i className="far fa-trash-alt me-2"></i>Delete</a>
-                                        <a className="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                                        <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="#"><i className="far fa-trash-alt me-2"></i>Delete</a>
+                                        <a className="btn btn-link text-dark px-3 mb-0" href="#"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
                                     </div>
                                 </li>
                             }) : <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                            <div className="d-flex flex-column">
-                                <h6 className="mb-3 text-sm">Loading data...</h6>
-                                <span className="mb-2 text-xs">Proveedor: <span className="text-dark font-weight-bold ms-sm-2">Loading data...</span></span>
-                                <span className="mb-2 text-xs">Funcionario: <span className="text-dark ms-sm-2 font-weight-bold">Loading data...</span></span>
-                                <span className="text-xs">Productos: <span className="text-dark ms-sm-2 font-weight-bold">Loading data...</span></span>
-                            </div>
-                            <div className="ms-auto text-end">
-                                <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i className="far fa-trash-alt me-2"></i>Delete</a>
-                                <a className="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
-                            </div>
-                        </li>}
+                                <div className="d-flex flex-column">
+                                    <h6 className="mb-3 text-sm">Loading data...</h6>
+                                    <span className="mb-2 text-xs">Proveedor: <span className="text-dark font-weight-bold ms-sm-2">Loading data...</span></span>
+                                    <span className="mb-2 text-xs">Funcionario: <span className="text-dark ms-sm-2 font-weight-bold">Loading data...</span></span>
+                                    <span className="text-xs">Productos: <span className="text-dark ms-sm-2 font-weight-bold">Loading data...</span></span>
+                                </div>
+                                <div className="ms-auto text-end">
+                                    <a className="btn btn-link text-danger text-gradient px-3 mb-0" href="#"><i className="far fa-trash-alt me-2"></i>Delete</a>
+                                    <a className="btn btn-link text-dark px-3 mb-0" href="#"><i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                                </div>
+                            </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -108,30 +109,15 @@ function Pedidos() {
                     </div>
                     <div className="card-body pt-4 p-3">
                         <ul className="list-group">
-                            <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                                <div className="d-flex flex-column">
-                                    <h6 className="mb-3 text-sm">Oliver Liam</h6>
-                                    <span className="mb-2 text-xs">Company Name: <span className="text-dark font-weight-bold ms-sm-2">GW</span></span>
-                                    <span className="mb-2 text-xs">Email Address: <span className="text-dark ms-sm-2 font-weight-bold">gw@gmail.com</span></span>
-                                    <span className="text-xs">NIT: <span className="text-dark ms-sm-2 font-weight-bold">FRB1235476</span></span>
-                                </div>
-                            </li>
-                            <li className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
-                                <div className="d-flex flex-column">
-                                    <h6 className="mb-3 text-sm">Lucas Harper</h6>
-                                    <span className="mb-2 text-xs">Company Name: <span className="text-dark font-weight-bold ms-sm-2">Stone Tech Zone</span></span>
-                                    <span className="mb-2 text-xs">Email Address: <span className="text-dark ms-sm-2 font-weight-bold">lucas@stone-tech.com</span></span>
-                                    <span className="text-xs">VAT Number: <span className="text-dark ms-sm-2 font-weight-bold">FRB1235476</span></span>
-                                </div>
-                            </li>
-                            <li className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
-                                <div className="d-flex flex-column">
-                                    <h6 className="mb-3 text-sm">Ethan James</h6>
-                                    <span className="mb-2 text-xs">Company Name: <span className="text-dark font-weight-bold ms-sm-2">Fiber Notion</span></span>
-                                    <span className="mb-2 text-xs">Email Address: <span className="text-dark ms-sm-2 font-weight-bold">ethan@fiber.com</span></span>
-                                    <span className="text-xs">VAT Number: <span className="text-dark ms-sm-2 font-weight-bold">FRB1235476</span></span>
-                                </div>
-                            </li>
+                                <li className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                       
+                                    <div className="d-flex flex-column">
+                                        <h6 className="mb-3 text-sm"></h6>
+                                        <span className="mb-2 text-xs">Sede destino: <span className="text-dark font-weight-bold ms-sm-2"></span></span>
+                                        <span className="mb-2 text-xs">Fecha realizado: <span className="text-dark ms-sm-2 font-weight-bold"></span></span>
+                                        <span className="text-xs">Estado: <span className="text-dark ms-sm-2 font-weight-bold"></span></span>
+                                    </div>
+                                </li>
                         </ul>
                     </div>
                 </div>

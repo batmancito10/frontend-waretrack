@@ -26696,3 +26696,8 @@ pre[class*="language-"] {
 }
 
 /*# sourceMappingURL=dashboard-free.css.map */
+
+
+.div-clickeable {
+  cursor: pointer;
+}
