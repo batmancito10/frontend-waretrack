@@ -158,7 +158,7 @@ function Usuarios() {
                 <li className="page-item">
                     <a className="page-link" href="javascript:;" aria-label="Previous">
                         <i className="fa fa-angle-left"></i>
-                        <span className="sr-only">Previous</span>
+                        <span className="sr-only">Back</span>
                     </a>
                 </li>
                 <li className="page-item"><a className="page-link" href="javascript:;">1</a></li>

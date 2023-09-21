@@ -41,7 +41,7 @@ function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit, 
     }, [groups, editarUsuarioModal, values])
 
     useEffect(() => {
-        if(values["sede"] === '' & values["groups"] === []){
+        if(values["sede"] === '' && values["groups"] === ''){
             setSedeSelected([])
             setGroupSelected([])
             if(editarUsuarioModal){
@@ -59,8 +59,10 @@ function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit, 
     }
     const changeSedes = (selectedOption) => {
         setSedeSelected(selectedOption)
-        const sedeData = selectedOption.value
-        setValues({...values, ["sede"]: [sedeData]})
+        const sedeData = selectedOption.map((option) => {
+            return option.value
+        })
+        setValues({...values, ["sede"]: sedeData})
     }
 
 
@@ -101,8 +103,9 @@ function FormUsuario ({inputHandler, values, dataReceived, sedes, id, onSubmit, 
         <div className="row mb-3">
             <div className="col-md-6">
                 <div className="d-flex gap-2 align-items-center justify-content-between">
-                    <label htmlFor={`${id}Sede`} className="fs-6 pt-1">Sede</label>
+                    <label className="fs-6 pt-1">Sede</label>
                     {dataReceived ? <Select 
+                        isMulti
                         name='sedes'
                         options={sedeList}
                         id={`${id}Sede`}

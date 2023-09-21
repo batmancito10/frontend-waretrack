@@ -15,7 +15,7 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes
         salario: 0,
         cargo: '',
         groups: [],
-        sede: '',
+        sede: [],
     })
 
     const inputHandler = (name) => {
@@ -64,7 +64,7 @@ function AgregarUsuario ({agregarUsuarioModal, setDataParent, sedeRequest, sedes
             salario: 0,
             cargo: '',
             groups: [],
-            sede: '',
+            sede: [],
         })
     }
 

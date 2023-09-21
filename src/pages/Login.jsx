@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
+import Lottie from 'lottie-react'; // Importa la biblioteca Lottie
+import animationData from '/src/assets/lottie/ondas2.json'; // Reemplaza con la ruta correcta al archivo JSON
 // import Loader from '../components/Loader.jsx'
 
 function Login () {
@@ -156,15 +158,17 @@ function Login () {
                 </div>
                 </div>
                 <div className="col-md-6">
-                <div className="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-                    <div
-                    className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-                    style={{
-                        backgroundImage:
-                        'url("/src/assets/img/curved-images/curved-6.jpg")'
-                    }}
-                    />
-                </div>
+                    <div className="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
+                    <div className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6">
+                        {}
+                        <Lottie
+                        animationData={animationData}
+                        loop={true}
+                        autoplay={true}
+                        speed={0.01}
+                        />
+                    </div>
+                    </div>
                 </div>
             </div>
             </div>
