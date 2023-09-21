@@ -15,7 +15,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
         salario: 0,
         cargo: '',
         groups: [],
-        sede: '',
+        sede: [],
     })
 
     const inputHandler = (name) => {
@@ -27,7 +27,10 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
     const editarUsuario = async () => {
         if(values["password"] === '') delete values["password"]
         if(values["sede"] === usuario["sede"]) {
-            values["sede"] = [usuario["sede"][0]["id"]]
+            values["sede"] = usuario["sede"].map(item => item.id)
+        }
+        if(values["groups"] === usuario["groups"]) {
+            values["groups"] = usuario["groups"].map(item => item.id)
         }
         
 
@@ -70,7 +73,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
             deleted_at: null,
             salario: 0,
             cargo: '',
-            groups: [],
+            groups: '',
             sede: '',
         })
         setEditarUsuarioModal(false)
@@ -87,7 +90,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
                             //setDataReceived(true)
                         })
                 }) 
-            } 
+            }
         if(usuario !== null) {
             setValues({
                 ...values,
@@ -100,6 +103,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
                 groups: usuario["groups"],
                 sede: usuario["sede"]
             })
+            //.map(item => item.id)
         }
     }, [editarUsuarioModal, usuario])
 
