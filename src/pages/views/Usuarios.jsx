@@ -99,7 +99,7 @@ function Usuarios() {
                                             <td>
                                                 <div className="d-flex px-2 py-1">
                                                     <div>
-                                                        <img src="https://demos.creative-tim.com/soft-ui-design-system-pro/assets/img/team-2.jpg" className="avatar avatar-sm me-3" />
+                                                        <img src={usuario.imagen ? usuario.imagen : 'https://demos.creative-tim.com/soft-ui-design-system-pro/assets/img/team-2.jpg'} className="avatar avatar-sm me-3" />
                                                     </div>
                                                     <div className="d-flex flex-column justify-content-center">
                                                         <h6 className="mb-0 text-xs">{usuario.first_name + ' ' + usuario.last_name}</h6>

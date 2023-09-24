@@ -48,7 +48,7 @@ function PerfilProveedor() {
                     <div className="row gx-4">
                         <div className="col-auto">
                             <div className="avatar avatar-xl position-relative">
-                                <img src='/src/assets/img/bruce-mars.jpg' alt="profile_image" className="w-100 border-radius-lg shadow-sm" />
+                                <img src={proveedor.imagen ? proveedor.imagen : 'https://cdn1.iconfinder.com/data/icons/programing-development-8/24/react_logo-512.png'} alt="profile_image" className="w-100 border-radius-lg shadow-sm" />
                             </div>
                         </div>
                         <div className="col-auto my-auto">

@@ -79,6 +79,7 @@ const CarrouselProveedores = () => {
                                         <div className="col-4 text-end d-flex justify-content-center align-items-center">
                                             <div className="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                                                 <i className="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                                                <img src={proveedor.imagen ? proveedor.imagen : 'https://cdn1.iconfinder.com/data/icons/programing-development-8/24/react_logo-512.png'} alt="" />                                              
                                             </div>
                                         </div>
                                     </div>
