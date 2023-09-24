@@ -8,12 +8,14 @@ import animationData from '/src/assets/lottie/ondas2.json'; // Reemplaza con la 
 function Login () {
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
+    const [loading, setLoading] = useState(false); // Estado para controlar el loader
 
     const navigate = useNavigate();
 
     //console.log();
 
     const makeRequest = async () => {
+        setLoading(true);
         const response = await fetch(import.meta.env.VITE_TOKEN, {
             mode: 'cors',
             method: 'post',
@@ -23,6 +25,7 @@ function Login () {
                 password: pass
             })
         });
+        setLoading(false);
         if(response.status !== 200){
             const error = response.status === 401 ? ' Nombre de usuario o contraseña incorrectos, intente nuevamente.' : ' Hubo un error, intente nuevamente.'
             throw new Error(error);
@@ -71,15 +74,19 @@ function Login () {
     })
 
     return <>
+    {loading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
     <div className="container position-sticky z-index-sticky top-0">
         <div className="row">
         <div className="col-12">
             {/* Navbar */}
             <nav className="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
             <div className="container-fluid pe-0 text-center d-flex justify-content-center">
-                <span className="navbar-brand font-weight-bolder fs-3">
-                Waretrack
-                </span>
+                <span className="waretracktext"></span>
+                
             </div>
             </nav>
             {/* End Navbar */}
