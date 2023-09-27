@@ -13,18 +13,41 @@ function CardCategorias() {
         setMostrarPanel(!mostrarPanel)
     }
 
-    const classPanel = mostrarPanel ? "fixed-plugin ps show" : "fixed-plugin"
-
     const serviciosRequest = async () => {
-        const response = await fetch(import.meta.env.VITE_SERVICIO, {
-            mode: 'cors',
-            method: 'get',
-            headers: { 'Authorization': `Bearer ${accessToken}` }
-        })
+        try {
+            const response = await fetch(import.meta.env.VITE_SERVICIO, {
+                mode: 'cors',
+                method: 'get',
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            })
 
-        if (response && response.json) {
-            return response.json();
-        } else {
+            if (response.status === 200) {
+                const jsonResponse = await response.json();
+
+                const categoriaInfo = await Promise.all(jsonResponse.map(async (servicio) => {
+                    const categoriaResponse = await fetch(`${import.meta.env.VITE_CATEGORIA}${servicio.categoria}/`, {
+                        mode: 'cors',
+                        method: 'get',
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    });
+
+                    const categoriaData = await categoriaResponse.json()
+
+
+                    return {
+                        ...servicio,
+                        categoria: categoriaData
+                    }
+                }))
+                return categoriaInfo
+            }
+            else {
+                console.log('Ha ocurrido un error en la respuesta de la API:', response.status);
+                return [];
+            }
+        }
+        catch (error) {
+            console.error('Ha ocurrido un error: ', error)
             return [];
         }
     }
@@ -41,15 +64,40 @@ function CardCategorias() {
     }, [])
 
     const productosRequest = async () => {
-        const response = await fetch(import.meta.env.VITE_PRODUCTO, {
-            mode: 'cors',
-            method: 'get',
-            headers: { 'Authorization': `Bearer ${accessToken}` }
-        })
+        try {
+            const response = await fetch(import.meta.env.VITE_PRODUCTO, {
+                mode: 'cors',
+                method: 'get',
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            })
 
-        if (response && response.json) {
-            return response.json();
-        } else {
+            if (response.ok) {
+                const jsonResponse = await response.json();
+
+                const categoriaInfo = await Promise.all(jsonResponse.map(async (producto) => {
+                    const categoriaResponse = await fetch(`${import.meta.env.VITE_CATEGORIA}${producto.categoria}/`, {
+                        mode: 'cors',
+                        method: 'get',
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    });
+
+                    const categoriaData = await categoriaResponse.json()
+
+
+                    return {
+                        ...producto,
+                        categoria: categoriaData
+                    }
+                }))
+                return categoriaInfo
+            }
+            else {
+                console.log('Ha ocurrido un error en la respuesta de la API:', response.status);
+                return [];
+            }
+        }
+        catch (error) {
+            console.error('Ha ocurrido un error: ', error)
             return [];
         }
 
@@ -78,26 +126,25 @@ function CardCategorias() {
                 </div>
                 <div className="card-body p-3 pb-0">
                     <ul className="list-group">
-                        {servicios.length === 0 ? (
-                            <div className="d-flex flex-column">
-                                <h6 className="mb-1 text-dark font-weight-bold text-sm">
-                                    Aún no se cuentan con servicios
-                                </h6>
-                            </div>
-                        ) : (
-                            servicios.map(servicio => (
+                        {Array.isArray(servicios) ? (
+                            servicios.map((servicio) => (
                                 <li className="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg" onClick={togglePanel} style={{ cursor: "pointer" }} key={servicio.id}>
                                     <div className="d-flex flex-column">
                                         <h6 className="mb-1 text-dark font-weight-bold text-sm">
                                             {servicio.nombre}
                                         </h6>
-                                        <span className="text-xs">{servicio.categoria}</span>
+                                        <span className="text-xs">{servicio.categoria.nombre}</span>
                                     </div>
                                     <div className="d-flex align-items-center text-sm">
-                                        {servicio.precio}
+                                        ${servicio.precio}
                                     </div>
                                 </li>
                             ))
+                        ) : (<div className="d-flex flex-column">
+                            <h6 className="mb-1 text-dark font-weight-bold text-sm">
+                                Aún no se cuentan con productos
+                            </h6>
+                        </div>
                         )}
 
                     </ul>
@@ -115,28 +162,26 @@ function CardCategorias() {
                 </div>
                 <div className="card-body p-3 pb-0">
                     <ul className="list-group">
-                    {productos.length === 0 ? (
-                            <div className="d-flex flex-column">
-                                <h6 className="mb-1 text-dark font-weight-bold text-sm">
-                                    Aún no se cuentan con productos
-                                </h6>
-                            </div>
-                        ) : (
-                            productos.map(producto => (
+                        {Array.isArray(productos) ? (
+                            productos.map((producto) => (
                                 <li className="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg" onClick={togglePanel} style={{ cursor: "pointer" }} key={producto.id}>
                                     <div className="d-flex flex-column">
                                         <h6 className="mb-1 text-dark font-weight-bold text-sm">
                                             {producto.nombre}
                                         </h6>
-                                        <span className="text-xs">{producto.categoria}</span>
+                                        <span className="text-xs">{producto.categoria.nombre}</span>
                                     </div>
                                     <div className="d-flex align-items-center text-sm">
                                         ${producto.precio}
                                     </div>
                                 </li>
                             ))
+                        ) : (<div className="d-flex flex-column">
+                            <h6 className="mb-1 text-dark font-weight-bold text-sm">
+                                Aún no se cuentan con productos
+                            </h6>
+                        </div>
                         )}
-
                     </ul>
                 </div>
             </div>
@@ -168,7 +213,7 @@ function CardCategorias() {
                 </div>
             </div>
         </div>
-        <div className={classPanel}>
+        <div className={`fixed-plugin ${mostrarPanel ? 'ps show' : ''}`}>
             <a className="fixed-plugin-button text-dark position-fixed px-3 py-2">
                 <i className="fa fa-cog py-2"> </i>
             </a>
