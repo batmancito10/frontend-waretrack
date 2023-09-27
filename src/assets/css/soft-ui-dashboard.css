@@ -1,4 +1,22 @@
 /*!
+
+=========================================================
+* Soft UI Dashboard - v1.0.7
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
+* Copyright 2023 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/soft-ui-dashboard/blob/main/LICENSE)
+
+* Coded by www.creative-tim.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
+/*!
    * Bootstrap  v5.2.3 (https://getbootstrap.com/)
    * Copyright 2011-2022 The Bootstrap Authors
    * Copyright 2011-2022 Twitter, Inc.
@@ -74,6 +92,92 @@
     --bs-highlight-bg: #fcf8e3;
   }
   
+  .loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  .loader {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+    margin:15px auto;
+    position: relative;
+    color: #FFF;
+    left: -100px;
+    box-sizing: border-box;
+    animation: shadowRolling 2s linear infinite;
+  }
+  
+  @keyframes shadowRolling {
+    0% {
+      box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+    }
+    12% {
+      box-shadow: 100px 0 #596CFF, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+    }
+    25% {
+      box-shadow: 110px 0 #596CFF, 100px 0 #596CFF, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+    }
+    36% {
+      box-shadow: 120px 0 #596CFF, 110px 0 #596CFF, 100px 0 #596CFF, 0px 0 rgba(255, 255, 255, 0);
+    }
+    50% {
+      box-shadow: 130px 0 #596CFF, 120px 0 #596CFF, 110px 0 #596CFF, 100px 0 #596CFF;
+    }
+    62% {
+      box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 #596CFF, 120px 0 #596CFF, 110px 0 #596CFF;
+    }
+    75% {
+      box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 #596CFF, 120px 0 #596CFF;
+    }
+    87% {
+      box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 #596CFF;
+    }
+    100% {
+      box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+    }
+  }
+  
+  .waretracktext{
+    font-size: 48px;
+    color: #000000bb;
+    display: inline-block;
+    font-weight: 700 !important;
+    font-family: roboto, Helvetica, sans-serif;
+    position: relative;
+  }
+  .waretracktext:before{
+    content: 'Waretrack';
+    animation: 2s print linear alternate 1;
+  }
+  
+  @keyframes print {
+  0% { content:  'W'; }
+  10% { content: 'Wa'; }
+  20% { content: 'War'; }
+  30% { content: 'Ware'; }
+  40% { content: 'Waret'; }
+  50% { content: 'Waretr'; }
+  60% { content: 'Waretra'; }
+  70% { content: 'Waretrac'; }
+  80%,90%,100% 
+    { content: 'Waretrack'; }
+  }
+  
+  @keyframes spin {
+    to{
+      transform: rotate(360deg);
+    }
+  }
   *,
   *::before,
   *::after {
@@ -3350,8 +3454,8 @@
   .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n + 3),
   .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
   .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
   }
   
   .input-group.has-validation> :nth-last-child(n + 3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
@@ -20145,7 +20249,7 @@
   =========================================================
   
   * Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-  * Copyright 2022 Creative Tim (https://www.creative-tim.com)
+  * Copyright 2023 Creative Tim (https://www.creative-tim.com)
   * Licensed under MIT (site.license)
   
   * Coded by www.creative-tim.com
@@ -21563,8 +21667,8 @@
   
   .form-control {
     border-radius: 0.5rem;
-    border-top-right-radius: 0.5rem !important;
-    border-bottom-right-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
     border-left-width: 1px;
   }
   
@@ -26678,3 +26782,8 @@
   }
   
   /*# sourceMappingURL=dashboard-free.css.map */
+  
+  
+  .div-clickeable {
+    cursor: pointer;
+  }
