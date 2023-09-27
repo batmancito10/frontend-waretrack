@@ -3,7 +3,6 @@ import { PageTitle } from "../../../App"
 import Select from "react-select";
 
 function AgregarProveedor() {
-    const [proveedor, setProveedor] = useState([])
     const accessToken = localStorage.getItem('accessToken')
     const { setTitle } = useContext(PageTitle)
     const [sedeList, setSedeList] = useState([]);
@@ -86,8 +85,6 @@ function AgregarProveedor() {
                 throw new Error('Error en la solicitud')
             }
 
-            const responseData = response.json()
-            setProveedor(responseData)
         } catch(error) {
             console.error('Ha ocurrido un error: ', error)
         }
@@ -97,12 +94,12 @@ function AgregarProveedor() {
 
     return (
         <>
-            <button type="button" className="btn btn-outline-default btn-lg w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" className="btn btn-outline-default btn-lg w-100" data-bs-toggle="modal" data-bs-target="#agregarProveedor">
                 <i className="bi bi-person-add fs-5 py-0 me-2"></i>
                 Agregar proveedor
             </button>
 
-            <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="agregarProveedor" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-header">

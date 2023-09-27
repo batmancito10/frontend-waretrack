@@ -16,5 +16,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'jsx-a11y/no-static-element-interactions': 'off',
   },
 }
