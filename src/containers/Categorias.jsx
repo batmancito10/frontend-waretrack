@@ -27,7 +27,7 @@ function CategoriasCard() {
             .catch(error => {
                 console.log('Ha ocurrido un error en la peticion: ', error)
             })
-    }, [])
+    }, [categorias])
 
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null)
 
@@ -37,19 +37,33 @@ function CategoriasCard() {
         setMostrarPanel(!mostrarPanel);
     };
 
+    const [modoEdicion, setModoEdicion] = useState(false)
+
+    const edicion = (id) => {
+        togglePanel()
+        setCategoriaSeleccionada(id)
+        setModoEdicion(true)
+
+    }
+
+    const agregar = () => {
+        togglePanel()
+        setModoEdicion(false)
+    }
+
     return <>
         <div className="col-lg-12 col-md-6">
             <div className="card h-auto">
                 <div className="card-header pb-0 px-3 d-flex align-items-center justify-content-between">
                     <h6>Categorias</h6>
-                    <button type="button" className="btn btn-sm bg-gradient-info mb-0" data-bs-toggle="modal" data-bs-target="#exampleModalMessage">+</button>
+                    <button type="button" className="btn btn-sm bg-gradient-info mb-0" onClick={agregar}>+</button>
                 </div>
                 <div className="card-body p-3">
                     <div className="timeline timeline-one-side">
                         {categorias ? categorias.map(categoria => {
-                            return <div className="timeline-block mb-3" key={categoria.id}  onClick={() => {togglePanel(); setCategoriaSeleccionada(categoria.id)}  } style={{ cursor: "pointer" }}>
+                            return <div className="timeline-block mb-3" key={categoria.id} onClick={() => edicion(categoria.id)} style={{ cursor: "pointer" }}>
                                 <span className="timeline-step">
-                                    <i className="ni ni-cart"  style={{ color: categoria.color }}></i>
+                                    <i className="ni ni-cart" style={{ color: categoria.color }}></i>
                                 </span>
                                 <div className="timeline-content">
                                     <h6 className="text-dark text-sm font-weight-bold mb-0">{categoria.nombre}</h6>
@@ -61,7 +75,11 @@ function CategoriasCard() {
                 </div>
             </div>
         </div>
-        <SidebarCategorias categoriaSeleccionada={categoriaSeleccionada} mostrarPanel={mostrarPanel}/>
+        {modoEdicion === true ?
+            <SidebarCategorias modoEdicion={modoEdicion} categoriaSeleccionada={categoriaSeleccionada} mostrarPanel={mostrarPanel} />
+            :
+            <SidebarCategorias modoEdicion={modoEdicion} mostrarPanel={mostrarPanel} />
+        }
     </>
 }
 
