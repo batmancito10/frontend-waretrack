@@ -109,7 +109,7 @@ function CardCategorias({togglePanel}) {
     }, [])
 
     return <>
-        <div className="col-lg-9">
+        <div className="col-lg-12">
             <div className="card h-auto">
                 <div className="card-header pb-0 p-3">
                     <div className="row">
