@@ -1,12 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { PageTitle } from '../App'
-import Select from "react-select";
+import { useNavigate } from 'react-router'
 
 
 function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada }) {
     const accessToken = localStorage.getItem('accessToken')
     const { setTitle } = useContext(PageTitle)
     const [categoria, setCategoria] = useState([])
+    const navigate = useNavigate()
 
     const categoriaRequest = async () => {
         const response = await fetch(`${import.meta.env.VITE_CATEGORIA}${categoriaSeleccionada}/`, {
@@ -132,11 +133,29 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
         }
     }
 
+    const eliminarCategoria = async() => {
+        const response = await fetch(`${import.meta.env.VITE_CATEGORIA}${categoriaSeleccionada}/`, {
+            mode: 'cors',
+            method: 'delete', 
+            headers: {'Authorization': `Bearer ${accessToken}`}
+        }).then(response => {
+            if(!response.ok){
+                throw new Error('Algo falló')
+            }
+        })
+        .then((data) => {
+            console.log(data)
+        }).catch((error) => {
+            console.log('Ha ocurrido un error, intente más tarde: ', error)
+        })
+        return response
+    }
+
     return (
         <div className={`fixed-plugin ${mostrarPanel ? 'ps show' : ''}`}>
             {modoEdicion ?
                 <>
-                    {handleEditar === true ?
+                    {handleEditar === false ?
                         <div className="card shadow-lg">
                             <div className="card-header pb-0 pt-3 ">
                                 <div className="float-start">
@@ -154,7 +173,7 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                                 <div>
                                     <h6 className="mb-0">Color de la categoria</h6>
                                 </div>
-                                <a href="#" className="switch-trigger background-color">
+                                <a className="switch-trigger background-color">
                                     <div className="badge-colors my-2 text-start">
                                         <div className="badge filter" style={{ backgroundColor: categoria.color, width: '25px', height: '25px' }}></div>
                                     </div>
@@ -166,8 +185,8 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                                 <div className="d-flex">
                                 </div>
                                 <hr className="horizontal dark my-sm-4" />
-                                <a className="btn bg-gradient-dark w-100" href="#" onClick={onHandleEditar}>Editar categoria</a>
-                                <a className="btn btn-outline-dark w-100" href="#">Eliminar categoria</a>
+                                <a className="btn bg-gradient-dark w-100" onClick={onHandleEditar}>Editar categoria</a>
+                                <a className="btn btn-outline-dark w-100" onClick={eliminarCategoria}>Eliminar categoria</a>
 
                             </div>
                         </div>
@@ -197,7 +216,7 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                                     <div>
                                         <h6 className="mb-0">Selecciona un color:</h6>
                                     </div>
-                                    <a href="#" className="switch-trigger background-color">
+                                    <a className="switch-trigger background-color">
                                         <div className="badge-colors my-2 text-start">
                                             {colors.map(color => {
                                                 return <div className={`badge filter ${categoria.color === color.hex ? 'active' : ''}`} style={{ backgroundColor: color.hex, width: '25px', height: '25px' }} onClick={() => handleColorClick(color)} key={color.hex}></div>
@@ -242,7 +261,7 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                             <div>
                                 <h6 className="mb-0">Selecciona un color:</h6>
                             </div>
-                            <a href="#" className="switch-trigger background-color">
+                            <a className="switch-trigger background-color">
                                 <div className="badge-colors my-2 text-start">
                                     {colors.map(color => {
                                         return <div className={`badge filter ${categoria.color === color.hex ? 'active' : ''}`} style={{ backgroundColor: color.hex, width: '25px', height: '25px' }} onClick={() => handleColorClickAgregar(color)} key={color.hex}></div>

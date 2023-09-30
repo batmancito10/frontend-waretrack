@@ -27,14 +27,18 @@ function CategoriasCard() {
             .catch(error => {
                 console.log('Ha ocurrido un error en la peticion: ', error)
             })
-    }, [categorias])
+    }, [])
 
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null)
 
-    const [mostrarPanel, setMostrarPanel] = useState(false);
+    const inicialMostrarPanel = localStorage.getItem('mostrarPanel') === 'true';
+    const [mostrarPanel, setMostrarPanel] = useState(inicialMostrarPanel);
 
     const togglePanel = () => {
-        setMostrarPanel(!mostrarPanel);
+        const nuevoEstado = !mostrarPanel;
+        setMostrarPanel(nuevoEstado);
+        // Guardar el nuevo estado en localStorage
+        localStorage.setItem('mostrarPanel', nuevoEstado.toString());
     };
 
     const [modoEdicion, setModoEdicion] = useState(false)
