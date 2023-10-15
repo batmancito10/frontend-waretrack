@@ -3,7 +3,7 @@ import { PageTitle } from '../App'
 import { useNavigate } from 'react-router'
 
 
-function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada }) {
+function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada, ocultar }) {
     const accessToken = localStorage.getItem('accessToken')
     const { setTitle } = useContext(PageTitle)
     const [categoria, setCategoria] = useState([])
@@ -76,7 +76,7 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
             })
             if (response.ok) {
                 console.log('Actualización exitosa');
-                setHandleEditar(true)
+                setHandleEditar(false)
             } else {
                 console.log('Error al actualizar');
             }
@@ -109,9 +109,9 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
         });
     };
 
-    const agregarRequest = async(e) => {
+    const agregarRequest = async (e) => {
         e.preventDefault()
-        try{
+        try {
             const response = await fetch(import.meta.env.VITE_CATEGORIA, {
                 mode: 'cors',
                 method: 'post',
@@ -121,35 +121,36 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                 },
                 body: JSON.stringify(dataAgregar)
             })
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error('Error en la solicitud')
             }
-            else{
+            else {
                 console.log('Se ha agregado correctamente la categoria')
             }
         }
-        catch(error) {
+        catch (error) {
             console.error('Algo ha ocurrido: ', error)
         }
     }
 
-    const eliminarCategoria = async() => {
+    const eliminarCategoria = async () => {
         const response = await fetch(`${import.meta.env.VITE_CATEGORIA}${categoriaSeleccionada}/`, {
             mode: 'cors',
-            method: 'delete', 
-            headers: {'Authorization': `Bearer ${accessToken}`}
+            method: 'delete',
+            headers: { 'Authorization': `Bearer ${accessToken}` }
         }).then(response => {
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error('Algo falló')
             }
         })
-        .then((data) => {
-            console.log(data)
-        }).catch((error) => {
-            console.log('Ha ocurrido un error, intente más tarde: ', error)
-        })
+            .then((data) => {
+                console.log(data)
+            }).catch((error) => {
+                console.log('Ha ocurrido un error, intente más tarde: ', error)
+            })
         return response
     }
+
 
     return (
         <div className={`fixed-plugin ${mostrarPanel ? 'ps show' : ''}`}>
@@ -164,7 +165,7 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                                 </div>
                                 <div className="float-end mt-4">
                                     <button className="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                                        <i className="fa fa-close"></i>
+                                        <i className="fa fa-close" onClick={ocultar}></i>
                                     </button>
                                 </div>
                             </div>
@@ -207,7 +208,7 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                                     </div>
                                     <div className="float-end mt-4">
                                         <button className="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                                            <i className="fa fa-close"></i>
+                                            <i className="fa fa-close" onClick={ocultar}></i>
                                         </button>
                                     </div>
                                 </div>
@@ -243,11 +244,11 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                                 <h5 className="mt-3 mb-0">Agregar categoria</h5>
                                 <div className="form-group">
                                     <label htmlFor="recipient-name" className="col-form-label">Nombre categoria:</label>
-                                    <input type="text" className="form-control" onChange={handleInputChangeAgregar} id="nombre" name="nombre" placeholder="Nombre categoria"/>
+                                    <input type="text" className="form-control" onChange={handleInputChangeAgregar} id="nombre" name="nombre" placeholder="Nombre categoria" />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="recipient-name" className="col-form-label">Tipo:</label>
-                                    <input type="text" className="form-control" onChange={handleInputChangeAgregar} id="tipo" name="tipo" placeholder="Tipo categoria"/>
+                                    <input type="text" className="form-control" onChange={handleInputChangeAgregar} id="tipo" name="tipo" placeholder="Tipo categoria" />
                                 </div>
                             </div>
                             <div className="float-end mt-4">
@@ -270,9 +271,8 @@ function SidebarCategorias({ modoEdicion, mostrarPanel, categoriaSeleccionada })
                             </a>
                             <div className="form-group">
                                 <label htmlFor="recipient-name" className="col-form-label">Descripción de la categoria:</label>
-                                <input type="text" className="form-control" onChange={handleInputChangeAgregar} id="descripcion" name="descripcion" placeholder="Descripcion categoria"/>
-                            </div>                   
-                            {console.log(dataAgregar)}
+                                <input type="text" className="form-control" onChange={handleInputChangeAgregar} id="descripcion" name="descripcion" placeholder="Descripcion categoria" />
+                            </div>
                             <div className="d-flex">
                             </div>
                             <hr className="horizontal dark my-sm-4" />

@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from "react"
 import { PageTitle } from '../App'
+import SidebarServicios from './SidebarServicios'
 
-function CardCategorias({togglePanel}) {
+function CardCategorias() {
     const accessToken = localStorage.getItem('accessToken')
     const { setTitle } = useContext(PageTitle)
     const [servicios, setServicios] = useState([])
@@ -108,6 +109,25 @@ function CardCategorias({togglePanel}) {
             })
     }, [])
 
+    const [servicioSeleccionado, setServicioSeleccionado] = useState(null)
+    const [mostrarPanelServicio, setMostrarPanelServicio] = useState(false);
+    const [modoEdicionServicio, setModoEdicionServicio] = useState(false)
+
+    const togglePanel = () => {
+        setMostrarPanelServicio(true);
+    };
+
+    const ocultarServicio = () => {
+        setMostrarPanelServicio(false);
+    };
+
+    const edicion = (id) => {
+        togglePanel()
+        setServicioSeleccionado(id)
+        setModoEdicionServicio(true)
+
+    }
+
     return <>
         <div className="col-lg-12">
             <div className="card h-auto">
@@ -122,7 +142,7 @@ function CardCategorias({togglePanel}) {
                     <ul className="list-group">
                         {Array.isArray(servicios) ? (
                             servicios.map((servicio) => (
-                                <li className="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg" onClick={togglePanel} style={{ cursor: "pointer" }} key={servicio.id}>
+                                <li className="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg" onClick={() => edicion(servicio.id)} style={{ cursor: "pointer" }} key={servicio.id}>
                                     <div className="d-flex flex-column">
                                         <h6 className="mb-1 text-dark font-weight-bold text-sm">
                                             {servicio.nombre}
@@ -207,7 +227,7 @@ function CardCategorias({togglePanel}) {
                 </div>
             </div>
         </div>
-        {/* <SidebarCategorias mostrarPanel={mostrarPanel}></SidebarCategorias> */}
+        <SidebarServicios servicioSeleccionado={servicioSeleccionado} mostrarPanelServicio={mostrarPanelServicio} ocultarServicio={ocultarServicio}></SidebarServicios>
     </>
 }
 

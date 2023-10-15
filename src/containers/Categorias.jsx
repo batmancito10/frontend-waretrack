@@ -31,14 +31,14 @@ function CategoriasCard() {
 
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null)
 
-    const inicialMostrarPanel = localStorage.getItem('mostrarPanel') === 'true';
-    const [mostrarPanel, setMostrarPanel] = useState(inicialMostrarPanel);
+    const [mostrarPanel, setMostrarPanel] = useState(false);
 
     const togglePanel = () => {
-        const nuevoEstado = !mostrarPanel;
-        setMostrarPanel(nuevoEstado);
-        // Guardar el nuevo estado en localStorage
-        localStorage.setItem('mostrarPanel', nuevoEstado.toString());
+        setMostrarPanel(true);
+    };
+
+    const ocultar = () => {
+        setMostrarPanel(false);
     };
 
     const [modoEdicion, setModoEdicion] = useState(false)
@@ -80,7 +80,7 @@ function CategoriasCard() {
             </div>
         </div>
         {modoEdicion === true ?
-            <SidebarCategorias modoEdicion={modoEdicion} categoriaSeleccionada={categoriaSeleccionada} mostrarPanel={mostrarPanel} />
+            <SidebarCategorias modoEdicion={modoEdicion} categoriaSeleccionada={categoriaSeleccionada} mostrarPanel={mostrarPanel} ocultar={ocultar}/>
             :
             <SidebarCategorias modoEdicion={modoEdicion} mostrarPanel={mostrarPanel} />
         }

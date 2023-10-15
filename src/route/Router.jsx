@@ -10,6 +10,8 @@ import Notfound from '../components/utils/Notfound'
 import RouteProtector from '../components/utils/RouteProtector'
 import PerfilProveedor from "../pages/views/perfilProveedor";
 import CategoriasServicios from "../pages/views/CategoriasServicios";
+import Stock from "../pages/views/Stock";
+import StockTable from "../containers/StockTable"
 
 function Router () {
 
@@ -26,6 +28,8 @@ function Router () {
                         <Route path="pedidos-proveedores"  element={<PedidosProveedores />}/>
                         <Route path="detalle-proveedor"  element={<PerfilProveedor />}/>
                         <Route path="categorias-servicios" element={<CategoriasServicios/>}/>
+                        <Route path="stock" element={<Stock/>}/>
+                        <Route path="stock-sede" element={<StockTable/>}/>
                         <Route index element={<Dashboard />}/>
                     </Route>
                     <Route path="*" element={<Notfound />}/>
