@@ -60,7 +60,6 @@ function Pedidos() {
             .then((data) => {
                 setPedidos(data);
             })
-        console.log("me estoy ejecutando ")
     }, [])
 
     function fechaHora(fechaAPI) {
