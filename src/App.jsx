@@ -7,6 +7,8 @@ import Sidebar from './components/Sidebar';
 export const PageTitle = createContext();
 
 function App() {
+  const [title, setTitle] = useState();
+
   useEffect(() => {
     const script = document.createElement('script');
 
@@ -19,8 +21,6 @@ function App() {
       document.body.removeChild(script);
     };
   }, []);
-
-  const [title, setTitle] = useState('');
 
   return (
     <>
