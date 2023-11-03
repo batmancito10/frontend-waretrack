@@ -32,12 +32,19 @@
 
 .card:hover .card_location{
   color: white;
-
 }
 
-.title {
-
+.card.active {
+  background-color: #FF6F91;
+  color: white;
 }
+
+.card.active .card_location {
+  color: white;
+}
+
+
+
 .title {
   font-weight: 700;
 }

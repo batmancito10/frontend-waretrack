@@ -62,14 +62,6 @@ function Sidebar() {
               <span className="nav-link-text ms-1">Stock</span>
             </NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink to="stock-sede" className={'nav-link'}>
-              <div className="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                <img src={svgs.svg3} />
-              </div>
-              <span className="nav-link-text ms-1">stock sede</span>
-            </NavLink>
-          </li>
 
           <li className="nav-item">
             <NavLink to="ventas" className={'nav-link'}>

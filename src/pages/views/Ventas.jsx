@@ -5,7 +5,6 @@ import requestApi from '../../components/utils/requestApi';
 import VentaManager from '../../components/ventas/VentaManager';
 import { useEffect, useState } from 'react';
 
-
 function Ventas() {
   const [inputValues, setinputValues] = useState({});
 
@@ -15,12 +14,14 @@ function Ventas() {
   const [producto, setProducto] = useState([]);
   const [servicio, setServicio] = useState([]);
 
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredServices, setFilteredServices] = useState([]);
+
   const [selectedSede, setSelectedSede] = useState(null);
-  const [selecteProducts, setSelecteProducts] = useState([]);
+  const [selectedProducts, setSelecteProducts] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
 
   const [totalPrice, setTotalPrice] = useState(0);
-
 
   function getClient() {
     const res = requestApi('cliente', 'GET');
@@ -40,29 +41,39 @@ function Ventas() {
     }
   }
 
+  function filterProduct() {
+    const uniqueProducts = new Set();
+
+    producto?.forEach((pdt) => {
+      pdt.sedes.forEach((sede) => {
+        if (sede.sede_id === selectedSede?.id) {
+          uniqueProducts.add(pdt);
+        }
+      });
+    });
+
+    setFilteredProducts(Array.from(uniqueProducts));
+  }
+
+  useEffect(() => {
+    filterProduct();
+    return () => {};
+  }, [selectedSede]);
+
   function calculateTotalValue() {
-    const selectedProduct = producto.find(
-      (product) => product.id === Number(inputValues.producto)
-    );
-    const selectedService = servicio.find(
-      (servicio) => servicio.id === Number(inputValues.servicio)
-    );
-
     let total = 0;
+    selectedServices.forEach((srv) => {
+      // let productTotal = srv.price * srv.amount
+      total += srv.price;
+    });
 
-    if (selectedProduct && selectedService) {
-      total = selectedProduct?.precio + selectedService?.precio;
-    } else if (selectedProduct) {
-      total = selectedProduct?.precio;
-    } else if (selectedService) {
-      total = selectedService?.precio;
-    } else {
-      total = 0;
-    }
+    selectedProducts.forEach((prd) => {
+      // let productTotal = prd.price * prd.amount
+      total += prd.price;
+    });
 
     setTotalPrice(total);
   }
-
 
   useEffect(() => {
     cajaCompleta && setInformation();
@@ -79,18 +90,11 @@ function Ventas() {
   useEffect(() => {
     calculateTotalValue();
     return () => {};
-  }, [inputValues]);
-  
+  }, [selectedProducts, selectedServices]);
 
   return (
     <div className={styles.container_form}>
-      <Sedes sedes={sede} setSede={setSelectedSede} />
-
-      <h1>
-        {selectedSede?.nombre ? selectedSede.nombre : 'seleccione una sede'}
-      </h1>
-      <br />
-      <br />
+      <Sedes sedes={sede} setSede={setSelectedSede} selected={selectedSede} />
 
       <form className={styles.form}>
         <label htmlFor="producto" className={`${styles.label}`}>
@@ -99,10 +103,13 @@ function Ventas() {
             isDisabled={selectedSede === null || producto.length === 0}
             placeholder={producto?.length === 0 && 'Sin productos'}
             isMulti
-            options={producto?.map((pro) => ({
+            options={filteredProducts?.map((pro) => ({
               label: pro.nombre,
               value: pro.id,
+              price: pro.precio,
+              amount: 1,
             }))}
+            value={selectedProducts}
             onChange={(selectedProducts) =>
               setSelecteProducts(selectedProducts)
             }
@@ -117,10 +124,13 @@ function Ventas() {
             isMulti
             id="servicio"
             name="servicio"
-            options={servicio?.map((item) => ({
-              label: item.nombre,
-              value: item.id,
+            options={servicio?.map((srv) => ({
+              label: srv.nombre,
+              value: srv.id,
+              price: srv.precio,
+              amount: 1,
             }))}
+            value={selectedServices}
             onChange={(selectedServices) =>
               setSelectedServices(selectedServices)
             }
@@ -129,7 +139,12 @@ function Ventas() {
       </form>
 
       <div className="container-venta_manager">
-        <VentaManager products={selecteProducts} services={selectedServices} />
+        <VentaManager
+          products={selectedProducts}
+          services={selectedServices}
+          setSelecteProducts={setSelecteProducts}
+          setSelectedServices={setSelectedServices}
+        />
       </div>
 
       <div className={styles.container_confirm}>

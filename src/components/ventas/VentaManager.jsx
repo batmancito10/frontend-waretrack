@@ -2,19 +2,32 @@ import { useState } from 'react';
 import styles from '../../assets/css/modules/ventaManager.module.css';
 import icons from '../../assets/svg/imports';
 
-function VentaManager({ products, services }) {
-  const [listOfProducts, setListOfProducts] = useState([]);
-  const [amount, setAmount] = useState(1);
-  const [product, setProduct] = useState({});
+function VentaManager({
+  products,
+  services,
+  setSelecteProducts,
+  setSelectedServices,
+}) {
+  const [productsAmount, setProductsAmount] = useState([]);
+
+  function handleDelete(category, id) {
+    if (category === 'producto') {
+      const newProducts = products.filter((product) => product.value !== id);
+      setSelecteProducts(newProducts);
+    } else if (category === 'servicio') {
+      const newServices = services.filter((service) => service.value !== id);
+      setSelectedServices(newServices);
+    }
+  }
 
   return (
     <div className={styles.manager_container}>
       <table className={styles.table}>
         <tr className={styles.item}>
-          <th>Icon</th>
+          <th>Icono</th>
           <th>Producto</th>
           <th>Precio</th>
-          <th>Cant</th>
+          <th>Cantidad</th>
         </tr>
         {products.map((prd) => (
           <tr key={prd.value} className={styles.item}>
@@ -33,10 +46,15 @@ function VentaManager({ products, services }) {
             <td>
               <input
                 className={styles.amount}
-                defaultValue={1}
+                defaultValue={prd.amount}
                 type="number"
                 min={1}
                 max={prd.stock}
+                name={prd.label}
+              />
+              <img
+                src={icons.trash}
+                onClick={() => handleDelete('producto', prd.value)}
               />
             </td>
           </tr>
@@ -73,6 +91,10 @@ function VentaManager({ products, services }) {
                 defaultValue={1}
                 min={1}
                 max={srv.stock}
+              />
+              <img
+                src={icons.trash}
+                onClick={() => handleDelete('servicio', srv.value)}
               />
             </td>
           </tr>
