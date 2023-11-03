@@ -16,7 +16,6 @@ import Ventas from "../pages/views/Ventas";
 
 function Router () {
 
-
     return (
         <BrowserRouter>
             <Routes>
