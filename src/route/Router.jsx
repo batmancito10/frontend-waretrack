@@ -8,7 +8,7 @@ import Usuarios from '../pages/views/Usuarios'
 import PedidosProveedores from '../pages/views/PedidosProveedores'
 import Notfound from '../components/utils/Notfound'
 import RouteProtector from '../components/utils/RouteProtector'
-import PerfilProveedor from "../pages/views/perfilProveedor";
+import PerfilProveedor from "../pages/views/PerfilProveedor";
 import CategoriasServicios from "../pages/views/CategoriasServicios";
 import Stock from "../pages/views/Stock";
 import StockTable from "../containers/StockTable"
