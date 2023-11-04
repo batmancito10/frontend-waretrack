@@ -12,6 +12,7 @@ import PerfilProveedor from "../pages/views/perfilProveedor";
 import CategoriasServicios from "../pages/views/CategoriasServicios";
 import Stock from "../pages/views/Stock";
 import StockTable from "../containers/StockTable"
+import Ventas from "../pages/views/Ventas";
 
 function Router () {
 
@@ -30,6 +31,7 @@ function Router () {
                         <Route path="categorias-servicios" element={<CategoriasServicios/>}/>
                         <Route path="stock" element={<Stock/>}/>
                         <Route path="stock-sede" element={<StockTable/>}/>
+                        <Route path="ventas" element={<Ventas/>}/>
                         <Route index element={<Dashboard />}/>
                     </Route>
                     <Route path="*" element={<Notfound />}/>

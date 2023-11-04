@@ -1,0 +1,7 @@
+.container_sidebar {
+  height: auto;
+}
+
+.sidebar {
+  height: min-content !important;
+}

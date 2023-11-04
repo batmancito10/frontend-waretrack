@@ -181,18 +181,15 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
     const handleInputChange = (event, id, field) => {
         const { value } = event.target;
 
-        // Encuentra el índice del producto en el array de productos editados
         const productoIndex = productosEditados.findIndex(producto => producto.id === id);
 
         if (productoIndex !== -1) {
-            // Si el producto ya existe en el array, actualiza su información editada
             setProductosEditados(prevProductos => {
                 const nuevosProductos = [...prevProductos];
                 nuevosProductos[productoIndex][field] = value;
                 return nuevosProductos;
             });
         } else {
-            // Si el producto no existe en el array, agrégalo con la información editada
             setProductosEditados(prevProductos => [
                 ...prevProductos,
                 { id: id, [field]: value }
@@ -205,10 +202,10 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
         e.preventDefault()
 
         const data = {
-            funcionario: funcionarioSelected,
-            proveedor: proveedorSelected,
-            estado: estadoSelected,
-            sede: sedeSelected,
+            funcionario: funcionarioSelected.value,
+            proveedor: proveedorSelected.value,
+            estado: estadoSelected.value,
+            sede: sedeSelected.value,
             producto: productosEditados
         }
 
@@ -217,7 +214,7 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
         try {
             const response = await fetch(`${import.meta.env.VITE_PEDIDO}${pedidoSeleccionadoEditar}/`, {
                 mode: 'cors',
-                method: 'patch',
+                method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
@@ -235,13 +232,7 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
         }
     }
 
-    useEffect(() => {
-        setTitle('Editar pedido')
-        editarPedidoRequest()
-        .then((data) => {
-            setPedido(data)
-        })
-    }, [])
+    
 
     return (
         <div className="modal fade" id="editarPedido" tabIndex="-1" role="dialog" aria-labelledby="exampleModalMessageTitle" aria-hidden="true">
@@ -254,7 +245,7 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form id='editarPedido' onSubmit={editarPedidoRequest}>
+                    <form id='editarPedidoSeleccionado' onSubmit={editarPedidoRequest}>
                         <div className="modal-body">
                             <div className="form-group d-flex">
                                 <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
@@ -390,7 +381,7 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                             </div>
                         </div>
                     <div className="modal-footer">
-                        <button type="submit" className="btn bg-gradient-primary" data-bs-dismiss="modal" form="editarPedido">Aceptar</button>
+                        <button type="submit" className="btn bg-gradient-primary" data-bs-dismiss="modal" form="editarPedidoSeleccionado">Aceptar</button>
                     </div>
                     </form>
                 </div>

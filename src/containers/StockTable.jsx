@@ -10,6 +10,7 @@ function StockTable() {
     const idSede = location.state?.proveedorId;
 
     const [stock, setStock] = useState([])
+    const [editStockId, setEditStockId] = useState(null);
 
     const stockRequest = async () => {
         try {
@@ -30,6 +31,8 @@ function StockTable() {
         }
     }
 
+    const [refrescar, setRefrescar] = useState(false)
+
     useEffect(() => {
         setTitle('Stock sede');
         stockRequest()
@@ -41,52 +44,65 @@ function StockTable() {
             .catch((error) => {
                 console.error('Error al obtener las sedes:', error);
             });
-    }, [])
+    }, [stock])
 
     const [dobleClick, setDobleClick] = useState(false)
     const [inputValue, setInputValue] = useState(0);
-    const handleInputStock = (e, stockcito) => {
+
+    const handleInputStock = (e, stockId, stockcito) => {
         setDobleClick(!dobleClick)
         e.stopPropagation();
+        setEditStockId(stockId);
         setInputValue(stockcito.stock);
-    }
+    };
+
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
 
     const patchRequest = async (e) => {
-        e.preventDefault()
 
         const data = {
             stock: inputValue
         }
-        try {
-            let idProd = null
-            stock.map((stockcito) => {
-                idProd = stockcito.id
-            })
-            const response = await fetch(import.meta.env.VITE_PATCH_STOCK.replace(':sede', idSede).replace(':producto', idProd), {
-                mode: 'cors',
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
+        if (editStockId === null) {
+            return;
+        }
+        else {
+            try {
+                const response = await fetch(import.meta.env.VITE_PATCH_STOCK.replace(':sede', idSede).replace(':producto', editStockId), {
+                    mode: 'cors',
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
 
 
-            if (response.ok) {
-                console.log('Actualización exitosa');
-            } else {
-                console.log('Error al actualizar');
+                if (response.ok) {
+                    console.log('Actualización exitosa');
+                    setEditStockId(0)
+                } else {
+                    console.log('Error al actualizar');
+                }
+            }
+            catch (error) {
+                console.error('Hubo un error al hacer la solicitud', error);
             }
         }
-        catch (error) {
-            console.error('Hubo un error al hacer la solicitud', error);
-        }
     }
+
+
+    useEffect(() => {
+        setTitle('Stock');
+        patchRequest()
+            .then((data) => {
+                setStock(data)
+            })
+    }, [refrescar])
 
     return <div className="row">
         <div className="col-12">
@@ -133,12 +149,12 @@ function StockTable() {
                                             <td className="align-middle text-center">
                                                 {producto.stock.map((stockcito) => (
                                                     <div className="d-flex align-items-center justify-content-center" key={stockcito.stock}>
-                                                        {dobleClick ? (
-                                                            <input className="form-control w-35 mr-1 d-flex align-items-center" type="text" name="stock" key={stockcito.stock} value={inputValue} onChange={handleInputChange} onKeyUp={(e) => {if (e.key === 'Enter') {patchRequest(e)}}}/>
+
+                                                        {editStockId === producto.id ? (
+                                                            <input className="form-control w-35 mr-1 d-flex align-items-center" type="text" name="stock" key={stockcito.stock} value={inputValue} onChange={handleInputChange} onKeyUp={(e) => { if (e.key === 'Enter') { setRefrescar(true) } }} />
                                                         ) : (
                                                             <div className="d-flex align-items-center">
-                                                                <span className="me-2 text-xs font-weight-bold" key={stockcito.stock} onDoubleClick={(e) => handleInputStock(e, stockcito)}>{stockcito.stock}</span>
-
+                                                                <span className="me-2 text-xs font-weight-bold" key={stockcito.stock} onDoubleClick={(e) => handleInputStock(e, producto.id, stockcito)}>{stockcito.stock}</span>
                                                                 <div>
                                                                     <div className="progress">
                                                                         <div className="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: '60%' }}></div>

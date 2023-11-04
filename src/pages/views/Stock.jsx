@@ -1,4 +1,4 @@
-import SedesStock from "../../containers/SedesStock"
+import SedesStock from "../../containers/SedesStock.jsx"
 
 function Stock() {
     return <>
@@ -6,4 +6,4 @@ function Stock() {
     </>
 }
 
-export default Stock
+export default Stock;
