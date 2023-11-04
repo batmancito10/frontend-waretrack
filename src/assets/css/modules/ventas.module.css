@@ -23,20 +23,32 @@
   margin-bottom: 0.5rem;
 }
 
-.container_total {
+
+.container_confirm {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem;
 }
 
-.container_total span {
+.price {
+  font-weight: 600;
   font-size: 20px;
-  width: 150px;
-  text-align: center;
+  text-align: right;
+}
+
+.btn_verde {
+  background-color: #4e8397;
+  color: #c4fcef;
+  font-weight: 600;
+  font-size: 20px;
   border-radius: 50px;
   padding: 0.5rem 2rem;
-  color: #21232a;
-  border: 1px solid;
-  font-weight: 700;
+  border: transparent;
+  outline-color: #21232a;
+  transition: background-color 0.2s linear;
+}
+
+.btn_verde:hover {
+  background-color: #008f7a;
 }
