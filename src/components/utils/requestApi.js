@@ -6,7 +6,6 @@ function requestApi(path, verb, data) {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
-
   switch (verb) {
     case 'GET':
       return axios
@@ -16,13 +15,17 @@ function requestApi(path, verb, data) {
 
     case 'POST':
       return axios
-        .post(`${import.meta.env.VITE_API_ENDPOINT}/${path}/`, data, { headers })
+        .post(`${import.meta.env.VITE_API_ENDPOINT}/${path}/`, data, {
+          headers,
+        })
         .then((res) => res.data)
         .catch((err) => console.log(err));
 
     case 'PATCH':
       return axios
-        .patch(`${import.meta.env.VITE_API_ENDPOINT}/${path}/`, data, { headers })
+        .patch(`${import.meta.env.VITE_API_ENDPOINT}/${path}/`, data, {
+          headers,
+        })
         .then((res) => res.data)
         .catch((err) => console.log(err));
 

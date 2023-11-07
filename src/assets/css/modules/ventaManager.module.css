@@ -6,7 +6,6 @@
   padding-top: 2rem;
   gap: 1rem;
   margin: 2rem 0;
-  border: 1px solid #21232a;
   padding: 0.5rem;
   border-radius: 10px;
 }
@@ -25,10 +24,23 @@
   gap: 1rem;
 }
 
+.header,
 .item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+.item {
+  transition: background-color 0.2s ease-out, color 0.2s ease-out;
+  border-radius: 10px;
+}
+
+.item:hover {
+  background-color: silver;
+  color: black;
 }
 
 .item_icon {
@@ -43,27 +55,15 @@
 }
 
 .amount {
-  width: 30px;
+  width: 50px;
   text-align: center;
-}
-
-
-.btn_decrement,
-.btn_increment {
-  width: fit-content;
   border: transparent;
-  transition: background-color .2s ease-out;
+  border: 1px solid rgb(208, 207, 207);
 }
 
-.btn_decrement:hover,
-.btn_increment:hover {
-
-  background-color: silver;
-}
-
-
-
-
-.btn_decrement {
-
+.container_icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
