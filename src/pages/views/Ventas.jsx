@@ -1,14 +1,13 @@
+import PropTypes, { func } from 'prop-types';
 import Sedes from '../../components/ventas/Sedes';
 import Select from 'react-select';
 import styles from '../../assets/css/modules/ventas.module.css';
 import requestApi from '../../components/utils/requestApi';
 import VentaManager from '../../components/ventas/VentaManager';
 import { useEffect, useState } from 'react';
+import ModalVenta from '../../components/modals/ModalVenta';
 
 function Ventas() {
-  const [inputValues, setinputValues] = useState({});
-
-  const [cliente, setCliente] = useState([]);
   const [cajaCompleta, setCajaCompleta] = useState({});
   const [sede, setSede] = useState([]);
   const [producto, setProducto] = useState([]);
@@ -22,11 +21,6 @@ function Ventas() {
   const [selectedServices, setSelectedServices] = useState([]);
 
   const [totalPrice, setTotalPrice] = useState(0);
-
-  function getClient() {
-    const res = requestApi('cliente', 'GET');
-    return res;
-  }
 
   function getCajaCompleta() {
     const res = requestApi('caja/completa', 'GET');
@@ -55,37 +49,96 @@ function Ventas() {
     setFilteredProducts(Array.from(uniqueProducts));
   }
 
-  useEffect(() => {
-    filterProduct();
-    return () => {};
-  }, [selectedSede]);
+  function filterServices() {
+    const uniqueServices = new Set();
+    servicio?.forEach((srv) => {
+      srv.sedes.forEach((sede) => {
+        if (sede === selectedSede?.id) {
+          uniqueServices.add(srv);
+        }
+      });
+    });
+
+    setFilteredServices(Array.from(uniqueServices));
+  }
 
   function calculateTotalValue() {
     let total = 0;
     selectedServices.forEach((srv) => {
-      // let productTotal = srv.price * srv.amount
-      total += srv.price;
+      total += srv.price * srv.amount;
     });
 
     selectedProducts.forEach((prd) => {
-      // let productTotal = prd.price * prd.amount
-      total += prd.price;
+      total += prd.price * prd.amount;
     });
 
     setTotalPrice(total);
   }
 
+  function generatePayment() {
+    const { productsId, servicesId } = getIdproductsAndServices(
+      selectedProducts,
+      selectedServices
+    );
+
+    if (productsId.length === 0 && servicesId.length === 0) {
+      return alert('No hay productos ni servicios seleccionados');
+    }
+
+    const body = {
+      codigo: '1234567890', // eliminar cuando deje de ser necesario enviarlo al backend
+      sede: selectedSede.id,
+      producto: productsId, // Debe ser opcional
+      servicio: servicesId, // Debe ser opcional
+      total: totalPrice,
+    };
+
+    requestApi('factura', 'POST', body)
+      .then(() => {
+        setSelectedSede(null);
+        clearForm();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Error al generar la factura');
+      });
+  }
+
+  function clearForm() {
+    setSelecteProducts([]);
+    setSelectedServices([]);
+  }
+
+  function getIdproductsAndServices(prds, srvs) {
+    let productsId = [];
+    let servicesId = [];
+
+    prds.forEach((prd) => {
+      productsId.push(prd.value);
+    });
+
+    srvs.forEach((srv) => {
+      servicesId.push(srv.value);
+    });
+
+    return { productsId, servicesId };
+  }
+
   useEffect(() => {
-    cajaCompleta && setInformation();
-  }, [cajaCompleta]);
+    clearForm();
+    filterProduct();
+    filterServices();
+    return () => {};
+  }, [selectedSede]);
 
   useEffect(() => {
     const cajaCompleta = getCajaCompleta();
     cajaCompleta.then((res) => setCajaCompleta(res));
-
-    const cliente = getClient();
-    cliente.then((res) => setCliente(res));
   }, []);
+
+  useEffect(() => {
+    cajaCompleta && setInformation();
+  }, [cajaCompleta]);
 
   useEffect(() => {
     calculateTotalValue();
@@ -100,14 +153,16 @@ function Ventas() {
         <label htmlFor="producto" className={`${styles.label}`}>
           <p className={`${styles.label_p}`}>Producto</p>
           <Select
+            isMulti
             isDisabled={selectedSede === null || producto.length === 0}
             placeholder={producto?.length === 0 && 'Sin productos'}
-            isMulti
             options={filteredProducts?.map((pro) => ({
+              // si necesitas mas propiedades en ventasManager, solo agregalas aqui
               label: pro.nombre,
               value: pro.id,
               price: pro.precio,
               amount: 1,
+              image: pro.imagen,
             }))}
             value={selectedProducts}
             onChange={(selectedProducts) =>
@@ -124,11 +179,13 @@ function Ventas() {
             isMulti
             id="servicio"
             name="servicio"
-            options={servicio?.map((srv) => ({
+            options={filteredServices?.map((srv) => ({
+              // si necesitas mas propiedades en ventasManager, solo agregalas aqui
               label: srv.nombre,
               value: srv.id,
               price: srv.precio,
               amount: 1,
+              image: srv.imagen,
             }))}
             value={selectedServices}
             onChange={(selectedServices) =>
@@ -148,7 +205,9 @@ function Ventas() {
       </div>
 
       <div className={styles.container_confirm}>
-        <button className={styles.btn_verde}>vender</button>
+        <button className={styles.btn_verde} onClick={generatePayment}>
+          vender
+        </button>
 
         <span className={styles.price}>${totalPrice}</span>
       </div>
@@ -157,3 +216,10 @@ function Ventas() {
 }
 
 export default Ventas;
+
+Ventas.propTypes = {
+  products: PropTypes.array.isRequired,
+  services: PropTypes.array.isRequired,
+  setSelecteProducts: PropTypes.func.isRequired,
+  setSelectedServices: PropTypes.func.isRequired,
+};

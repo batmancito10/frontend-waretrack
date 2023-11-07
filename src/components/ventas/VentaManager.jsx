@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import styles from '../../assets/css/modules/ventaManager.module.css';
 import icons from '../../assets/svg/imports';
+import PropTypes from 'prop-types';
 
 function VentaManager({
   products,
@@ -8,8 +8,6 @@ function VentaManager({
   setSelecteProducts,
   setSelectedServices,
 }) {
-  const [productsAmount, setProductsAmount] = useState([]);
-
   function handleDelete(category, id) {
     if (category === 'producto') {
       const newProducts = products.filter((product) => product.value !== id);
@@ -23,85 +21,114 @@ function VentaManager({
   return (
     <div className={styles.manager_container}>
       <table className={styles.table}>
-        <tr className={styles.item}>
+        <tr className={styles.header}>
           <th>Icono</th>
           <th>Producto</th>
           <th>Precio</th>
           <th>Cantidad</th>
         </tr>
-        {products.map((prd) => (
-          <tr key={prd.value} className={styles.item}>
-            <td className={styles.item_icon}>
-              {prd?.img ? (
-                <img src={prd?.img} alt={`image of product ${prd?.label}`} />
-              ) : (
-                <img
-                  src={icons.carrot}
-                  alt={`image of product ${prd?.label}`}
+        {products.map((prd) => {
+          const { label, value, price, amount, image, stock } = prd;
+
+          return (
+            <tr key={value} className={styles.item}>
+              <td className={styles.item_icon}>
+                {image ? (
+                  <img src={image} alt={`image of product ${label}`} />
+                ) : (
+                  <img src={icons.carrot} alt={`image of product ${label}`} />
+                )}
+              </td>
+              <td className="product-name">{label}</td>
+              <td className="product-price">${price}</td>
+
+              <td className={styles.container_icons}>
+                <input
+                  className={styles.amount}
+                  defaultValue={amount}
+                  type="number"
+                  min={1}
+                  max={stock}
+                  name={label}
+                  onChange={(e) => {
+                    const newProducts = products.map((product) => {
+                      if (product.value === value) {
+                        product.amount = Number(e.target.value);
+                      }
+                      return product;
+                    });
+                    setSelecteProducts(newProducts);
+                  }}
                 />
-              )}
-            </td>
-            <td className="product-name">{prd?.label}</td>
-            <td className="product-price">${prd?.value}</td>
-            <td>
-              <input
-                className={styles.amount}
-                defaultValue={prd.amount}
-                type="number"
-                min={1}
-                max={prd.stock}
-                name={prd.label}
-              />
-              <img
-                src={icons.trash}
-                onClick={() => handleDelete('producto', prd.value)}
-              />
-            </td>
-          </tr>
-        ))}
+                <img
+                  src={icons.trash}
+                  onClick={() => handleDelete('producto', value)}
+                />
+              </td>
+            </tr>
+          );
+        })}
       </table>
 
       <div className={styles.divisor}></div>
 
       <table className={styles.table}>
-        <tr className={styles.item}>
-          <th>Icon</th>
-          <th>Producto</th>
+        <tr className={styles.header}>
+          <th>Icono</th>
+          <th>Servicio</th>
           <th>Precio</th>
-          <th>Cant</th>
+          <th>Cantidad</th>
         </tr>
-        {services.map((srv) => (
-          <tr key={srv.value} className={styles.item}>
-            <td className={styles.item_icon}>
-              {srv?.img ? (
-                <img src={srv?.img} alt={`image of product ${srv?.label}`} />
-              ) : (
-                <img
-                  src={icons.carrot}
-                  alt={`image of product ${srv?.label}`}
+
+        {services.map((srv) => {
+          const { label, value, price, amount, image } = srv;
+          return (
+            <tr key={value} className={styles.item}>
+              <td className={styles.item_icon}>
+                {image ? (
+                  <img src={image} alt={`image of service ${label}`} />
+                ) : (
+                  <img src={icons.carrot} alt={`image of service ${label}`} />
+                )}
+              </td>
+              <td className="product-name">{label}</td>
+              <td className="product-price">${price}</td>
+
+              <td className={styles.container_icons}>
+                <input
+                  className={styles.amount}
+                  defaultValue={amount}
+                  type="number"
+                  min={1}
+                  name={label}
+                  onChange={(e) => {
+                    const newServices = services.map((service) => {
+                      if (service.value === value) {
+                        service.amount = Number(e.target.value);
+                      }
+                      return service;
+                    });
+                    setSelectedServices(newServices);
+                  }}
                 />
-              )}
-            </td>
-            <td className="product-name">{srv?.label}</td>
-            <td className="product-price">${srv?.value}</td>
-            <td>
-              <input
-                className={styles.amount}
-                type="number"
-                defaultValue={1}
-                min={1}
-                max={srv.stock}
-              />
-              <img
-                src={icons.trash}
-                onClick={() => handleDelete('servicio', srv.value)}
-              />
-            </td>
-          </tr>
-        ))}
+                <img
+                  src={icons.trash}
+                  onClick={() => handleDelete('servicio', value)}
+                />
+              </td>
+            </tr>
+          );
+        })}
       </table>
     </div>
   );
 }
 
 export default VentaManager;
+
+VentaManager.propTypes = {
+  products: PropTypes.array.isRequired,
+  services: PropTypes.array.isRequired,
+  setSelecteProducts: PropTypes.func.isRequired,
+  setSelectedServices: PropTypes.func.isRequired,
+};
