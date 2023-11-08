@@ -146,14 +146,19 @@ function AgregarPedido() {
 
     const agregarPedidoRequest = async (e) => {
         e.preventDefault()
+        const fecha_realizado = new Date()
+        const formatoFEchaRealizado = fecha_realizado.toISOString()
+
+        console.log(formatoFEchaRealizado)
 
         const data = {
             ...pedidoEditado,
+            fecha_realizado: formatoFEchaRealizado,
             total: calcularPrecioTotal()
         }
 
         try {
-            const response = await fetch(import.meta.env.VITE_PEDIDO_PRODUCTO, {
+            const response = await fetch(import.meta.env.VITE_PEDIDO, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
