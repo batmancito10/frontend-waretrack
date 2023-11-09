@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import PropTypes from 'prop-types'
 import FormUsuario from "./FormUsuario";
+import styles from "../../../assets/css/modules/modals/editarUsuario.module.css"
 import './FormularioUsuario.css'
 
 function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest, sedes, setSedes, groups, setGroups, groupRequest, setEditarUsuarioModal}){
@@ -56,7 +58,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
     const editUser = (e) => {
         e.preventDefault()
         editarUsuario()
-            .then((response) => {
+            .then(() => {
                 document.querySelector('#closeEditarUsuario').click()
                 setDataParent(false)
             })
@@ -107,7 +109,7 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
         }
     }, [editarUsuarioModal, usuario])
 
-    return <div className="modal fade" id="modal-editar-usuario" tabIndex="-1" role="dialog" aria-labelledby="modal-editar-usuario" aria-hidden="true">
+    return <div className={editarUsuarioModal ? `${styles.modal_editarUsuario} modal fade` : 'modal fade'} id="modal-editar-usuario" tabIndex="-1" role="dialog" aria-labelledby="modal-editar-usuario" aria-hidden="true" style={{ zIndex: '99999999999'}}>
         <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div className="modal-content">
                 <div className="modal-body p-0">
@@ -120,7 +122,10 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
                         </div>
                         <div className="card card-footer">
                             <div className="d-flex justify-content-end gap-2">
-                                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal" id="closeEditarUsuario" onClick={limpiarFormulario}>Cancelar</button>
+                                <button className="btn btn-secondary" type="button" data-bs-dismiss="modal" id="closeEditarUsuario" onClick={() => {
+                                    limpiarFormulario()
+                                    setEditarUsuarioModal(false)
+                                }}>Cancelar</button>
                                 <button className="btn btn-primary" type="submit" form="EditarUsuario">Editar</button>
                             </div>
                         </div>
@@ -132,3 +137,16 @@ function EditarUsuario ({editarUsuarioModal, setDataParent, usuario, sedeRequest
 }
 
 export default EditarUsuario
+
+EditarUsuario.propTypes = {
+    editarUsuarioModal: PropTypes.bool,
+    setDataParent: PropTypes.func,
+    usuario: PropTypes.object,
+    sedeRequest: PropTypes.func,
+    sedes: PropTypes.array,
+    setSedes: PropTypes.func,
+    groups: PropTypes.array,
+    setGroups: PropTypes.func,
+    groupRequest: PropTypes.func,
+    setEditarUsuarioModal: PropTypes.func
+}
