@@ -18,6 +18,7 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
     const [proveedorSelected, setProveedorSelected] = useState([]);
 
     const [productoList, setProductoList] = useState([])
+    const [productoSelected, setProductoSelected] = useState([])
 
     const estadoList = [
         { value: 0, label: 'Recibido' },
@@ -130,8 +131,6 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
             return;
         }
 
-        console.log(pedidoo)
-
         const sedeResponse = await fetch(`${import.meta.env.VITE_SEDE}${pedidoo.sede}/`, {
             mode: 'cors',
             method: 'get',
@@ -150,15 +149,23 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
             headers: { 'Authorization': `Bearer ${accessToken}` }
         });
 
+        let productoData = []
+
+        pedidoo.producto.forEach((producto) => {
+            productoData.push(producto.producto);
+        });
+
         const sedeData = await sedeResponse.json();
         const funcionarioData = await funcionarioResponse.json();
         const proveedorData = await proveedorResponse.json();
 
+        console.log("producto data: ", productoData)
         return {
             ...pedidoo,
             sede: sedeData,
             proveedor: proveedorData,
             funcionario: funcionarioData,
+            producto: productoData
         };
     }
 
@@ -167,6 +174,7 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
             setTitle('Editar pedido')
             pedidoEspecificoRequest()
                 .then((data) => {
+                    console.log(data)
                     const dataProveedor = {
                         value: data.proveedor.id,
                         label: data.proveedor.nombre
@@ -185,20 +193,31 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                     const dataEstado = {
                         label: data.estado == true ? 'Recibido' : 'No recibido'
                     }
+
+                    let dataProducto = []
+                    let conter = 0
+                    data.producto.map((producto) => (
+                        dataProducto[conter] =
+                        {
+                            value: producto.id,
+                            label: producto.nombre
+                        }
+                        
+                    ));
+                    conter++
                     setProveedorSelected(dataProveedor)
                     setSedeSelected(dataSede)
                     setFuncionarioSelected(dataFuncionario)
                     setEstadoSelected(dataEstado)
+                    setProductoSelected(dataProducto)
                     setPedido(data)
+
                 })
                 .catch((error) => {
                     console.error('Hubo un error al obtener los datos del proveedor:', error);
                 });
         }
     }, [pedidoSeleccionadoEditar])
-
-    const [productosEditados, setProductosEditados] = useState([]);
-    const [nombreProducto, setNombreProducto] = useState('')
 
     const [productos, setProductos] = useState([]);
 
@@ -213,7 +232,6 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
             return producto;
         });
 
-        // Actualiza el estado con los productos editados
         setProductos(productosActualizados);
     };
 
@@ -380,54 +398,51 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                                             <h6>Productos</h6>
                                         </div>
                                         <div className="card-body px-0 pt-0 pb-2">
-                                            <div className="table-responsive p-0">
-                                                <table className="table align-items-center justify-content-center mb-0">
-                                                    <thead>
+                                            <table className="table align-items-center justify-content-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        {/* Estilo en línea para la primera columna */}
+                                                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style={{ width: '50%' }}>Nombre</th>
+                                                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cantidad</th>
+                                                        <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Precio unitario</th>
+                                                    </tr>
+                                                </thead>
+
+                                                {pedido?.producto?.map(producto => {
+                                                    return <tbody key={producto.id}>
                                                         <tr>
-                                                            {/* Estilo en línea para la primera columna */}
-                                                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style={{ width: '50%' }}>Nombre</th>
-                                                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cantidad</th>
-                                                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Precio unitario</th>
+                                                            <td>
+                                                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                                    {dataReceived ? (
+                                                                        <Select
+                                                                            name="producto"
+                                                                            options={productoList}
+                                                                            className="w-65"
+                                                                            onChange={(selectedOption, index) => {
+                                                                                handleProductChange(index, selectedOption.value)
+                                                                            }}
+                                                                            value={productoSelected}
+                                                                        />
+
+                                                                    ) : (
+                                                                        <select className="form-select w-65">
+                                                                            <option value="">Loading...</option>
+                                                                        </select>
+                                                                    )}
+                                                                </div>
+                                                                {console.log(productoSelected)}
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="cantidadProd" className="form-control w-65" value={producto.cantidad} onChange={(e) => handleInputChange(e, producto.id, 'cantidadProd')} />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="precioUnitarioProd" className="form-control w-65" value={producto.precio_unitario} onChange={(e) => handleInputChange(e, producto.id, 'precioUnitarioProd')} />
+                                                            </td>
                                                         </tr>
-                                                    </thead>
+                                                    </tbody>
 
-                                                    {pedido?.producto?.map(producto => {
-                                                        return <tbody key={producto.id}>
-                                                            <tr>
-                                                                <td>
-                                                                    <div className="d-flex px-2">
-                                                                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                                        {dataReceived ? (
-                                                                            <Select
-                                                                                name="producto"
-                                                                                options={productoList}
-                                                                                className="w-65"
-                                                                                onChange={(selectedOption) => {
-                                                                                    handleProductChange(index, selectedOption.value)
-                                                                                }}
-                                                                                value={rows.producto}
-                                                                            />
-
-                                                                        ) : (
-                                                                            <select className="form-select w-65">
-                                                                                <option value="">Loading...</option>
-                                                                            </select>
-                                                                        )}
-                                                                    </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text" name="cantidadProd" className="form-control w-65" value={producto.cantidad} onChange={(e) => handleInputChange(e, producto.id, 'cantidadProd')} />
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text" name="precioUnitarioProd" className="form-control w-65" value={producto.precio_unitario} onChange={(e) => handleInputChange(e, producto.id, 'precioUnitarioProd')} />
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-
-                                                    })}
-                                                </table>
-                                            </div>
+                                                })}
+                                            </table>
                                         </div>
                                     </div>
                                 </div>

@@ -147,13 +147,11 @@ function AgregarPedido() {
     const agregarPedidoRequest = async (e) => {
         e.preventDefault()
         const fecha_realizado = new Date()
-        const formatoFEchaRealizado = fecha_realizado.toISOString()
-
-        console.log(formatoFEchaRealizado)
+        const formatoFechaRealizado = fecha_realizado.toISOString()
 
         const data = {
             ...pedidoEditado,
-            fecha_realizado: formatoFEchaRealizado,
+            fecha_realizado: formatoFechaRealizado,
             total: calcularPrecioTotal()
         }
 
@@ -174,8 +172,6 @@ function AgregarPedido() {
                 console.log('Se agregó el pedido exitosamente');
             } else {
                 console.log('Error al agregar');
-                console.log(data)
-                console.log(rows)
             }
         } catch (error) {
             console.error('Hubo un error al hacer la solicitud', error);
