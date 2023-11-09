@@ -7,6 +7,9 @@ import EditarPedido from "../components/modals/pedidos/EditarPedido";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 function Pedidos() {
+    const divStyles = {
+        cursor: 'pointer'
+    };
     const [pedidos, setPedidos] = useState([])
     const accessToken = localStorage.getItem('accessToken')
     const { setTitle } = useContext(PageTitle)
@@ -76,16 +79,12 @@ function Pedidos() {
                 setRealizado(nuevosRealizados);
                 setTodosLosPedidos(data);
             })
-    }, [pedidos])
+    }, [])
 
     function fechaHora(fechaAPI) {
         const fecha = fechaAPI.split('T')[0]
         return fecha;
     }
-
-    const handleEliminarClick = (id) => {
-        setIdPedidoEliminar(id); // Establece el ID a eliminar cuando se hace clic en el botón "Eliminar"
-      };
 
     // DRAG AND DROP
 
@@ -124,7 +123,7 @@ function Pedidos() {
             } else {
                 console.log('Error al actualizar el estado');
             }
-        }catch (error) {
+        } catch (error) {
             console.error('Hubo un error al hacer la solicitud', error);
         }
 
@@ -132,12 +131,6 @@ function Pedidos() {
 
     const handleDragEnd = (result) => {
         const { destination, source, draggableId } = result
-
-        console.log(result)
-        console.log("dropablee:", source.droppableId)
-        console.log("destination:", destination.droppableId)
-        console.log(recibido)
-        console.log(realizado)
 
         if (source.droppableId == destination.droppableId) return;
 
@@ -194,8 +187,10 @@ function Pedidos() {
                                                                     {...provided.dragHandleProps}
                                                                     ref={provided.innerRef}
                                                                 >
-                                                                    {/* El contenido de tu elemento */}
-                                                                    <div className="d-flex flex-column" style={{ flex: 0.7 }}>
+                                                                    <div className="d-flex flex-column" style={{ flex: 0.7 }}
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#detallePedido"
+                                                                        onClick={() => setPedidoSeleccionadoDetalle(pedido.id)}>
                                                                         <h6 className="mb-3 text-sm">{pedido.proveedor.nombre}</h6>
                                                                         <span className="mb-2 text-xs">Sede destino:
                                                                             <span className="text-dark font-weight-bold ms-sm-2">{pedido.sede.nombre}</span>
@@ -209,7 +204,7 @@ function Pedidos() {
                                                                     </div>
                                                                     <div className="ms-auto text-end" style={{ flex: 0.3 }}>
                                                                         <a className="btn btn-link text-danger text-gradient px-3 mb-0"
-                                                                            data-bs-toggle="modal" data-bs-target="#modal-notification" 
+                                                                            data-bs-toggle="modal" data-bs-target="#modal-notification"
                                                                             onClick={() => setIdPedidoEliminar(pedido.id)}>
                                                                             <i className="far fa-trash-alt me-2"></i>Eliminar
                                                                         </a>
@@ -264,8 +259,13 @@ function Pedidos() {
                                 <div className="card-body pt-4 p-3" ref={provided.innerRef} {...provided.droppableProps}>
                                     {recibido ? recibido.map(pedido => {
                                         return (
-                                            <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg" key={pedido.id} style={{ display: 'flex' }}>
-                                                <div className="d-flex flex-column" style={{ flex: 0.7 }}>
+                                            <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg"
+                                                key={pedido.id}
+                                                style={{ display: 'flex' }}>
+                                                <div className="d-flex flex-column" style={{ flex: 0.7, divStyles }}
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#detallePedido"
+                                                onClick={() => setPedidoSeleccionadoDetalle(pedido.id)}>
                                                     <h6 className="mb-3 text-sm">{pedido.proveedor.nombre}</h6>
                                                     <span className="mb-2 text-xs">Sede destino:
                                                         <span className="text-dark font-weight-bold ms-sm-2">{pedido.sede.nombre}</span>
@@ -287,12 +287,11 @@ function Pedidos() {
                                                     </a>
                                                     <a className="btn btn-link text-dark px-3 mb-0"
                                                         data-bs-toggle="modal" data-bs-target="#editarPedido"
-                                                        onClick={() => {setPedidoSeleccionadoEditar(pedido.id); console.log("id:", pedido.id)}}>
+                                                        onClick={() => { setPedidoSeleccionadoEditar(pedido.id); console.log("id:", pedido.id) }}>
                                                         <i className="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Editar
                                                     </a>
                                                     <EliminarPedido idPedidoEliminar={idPedidoEliminar} />
                                                 </div>
-                                                {console.log(idPedidoEliminar)}
                                                 <DetallePedido pedidoSeleccionadoDetalle={pedidoSeleccionadoDetalle}></DetallePedido>
                                                 <EditarPedido pedidoSeleccionadoEditar={pedidoSeleccionadoEditar}></EditarPedido>
                                             </li>
