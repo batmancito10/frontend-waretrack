@@ -113,13 +113,12 @@ function Login () {
                         <input
                             name='username'
                             id='username'
-                            type="text"
+                            type="email"
                             autoComplete='true'
                             className="form-control"
                             placeholder="Usuario"
                             aria-label="Email"
                             aria-describedby="email-addon"
-                            maxLength={20}
                             value={user}
                             onChange={(e) => setUser(e.target.value)}
                             required

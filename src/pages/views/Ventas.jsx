@@ -5,13 +5,13 @@ import styles from '../../assets/css/modules/ventas.module.css';
 import requestApi from '../../components/utils/requestApi';
 import VentaManager from '../../components/ventas/VentaManager';
 import { useEffect, useState } from 'react';
-import ModalVenta from '../../components/modals/ModalVenta';
 
 function Ventas() {
   const [cajaCompleta, setCajaCompleta] = useState({});
   const [sede, setSede] = useState([]);
   const [producto, setProducto] = useState([]);
   const [servicio, setServicio] = useState([]);
+  const [cedula, setCedula] = useState(null);
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
@@ -21,6 +21,8 @@ function Ventas() {
   const [selectedServices, setSelectedServices] = useState([]);
 
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const cedulaMaxlength = 15;
 
   function getCajaCompleta() {
     const res = requestApi('caja/completa', 'GET');
@@ -32,6 +34,14 @@ function Ventas() {
       setSede(cajaCompleta.sedes);
       setProducto(cajaCompleta.productos);
       setServicio(cajaCompleta.servicios);
+    }
+  }
+
+  // controlar el tamaño maximo del input
+  function handleInputChange(event) {
+    const inputValue = event.target.value;
+    if (inputValue.length <= cedulaMaxlength) {
+      return setCedula(inputValue);
     }
   }
 
@@ -76,6 +86,17 @@ function Ventas() {
   }
 
   function generatePayment() {
+    selectedProducts.forEach((prd) => {
+      if (prd.amount <= 0) {
+        return alert('No hay stock disponible');
+      }
+    });
+    selectedServices.forEach((srv) => {
+      if (srv.amount <= 0) {
+        return alert('No hay stock disponible');
+      }
+    });
+
     const { productsId, servicesId } = getIdproductsAndServices(
       selectedProducts,
       selectedServices
@@ -86,10 +107,10 @@ function Ventas() {
     }
 
     const body = {
-      codigo: '1234567890', // eliminar cuando deje de ser necesario enviarlo al backend
+      cc: cedula,
       sede: selectedSede.id,
-      producto: productsId, // Debe ser opcional
-      servicio: servicesId, // Debe ser opcional
+      producto: productsId,
+      servicio: servicesId,
       total: totalPrice,
     };
 
@@ -97,6 +118,7 @@ function Ventas() {
       .then(() => {
         setSelectedSede(null);
         clearForm();
+        window.location.reload()
       })
       .catch((err) => {
         console.log(err);
@@ -110,18 +132,18 @@ function Ventas() {
   }
 
   function getIdproductsAndServices(prds, srvs) {
-    let productsId = [];
-    let servicesId = [];
+    let productsInCart = [];
+    let servicesInCart = [];
 
     prds.forEach((prd) => {
-      productsId.push(prd.value);
+      productsInCart.push({ producto: prd.value, unidades: prd.amount });
     });
 
     srvs.forEach((srv) => {
-      servicesId.push(srv.value);
+      servicesInCart.push({ servicio: srv.value, unidades: srv.amount });
     });
 
-    return { productsId, servicesId };
+    return { productsId: productsInCart, servicesId: servicesInCart };
   }
 
   useEffect(() => {
@@ -163,6 +185,8 @@ function Ventas() {
               price: pro.precio,
               amount: 1,
               image: pro.imagen,
+              stock: pro.sedes.find((sede) => sede.sede_id === selectedSede?.id)
+                ?.stock,
             }))}
             value={selectedProducts}
             onChange={(selectedProducts) =>
@@ -205,11 +229,19 @@ function Ventas() {
       </div>
 
       <div className={styles.container_confirm}>
+        <input
+          className={styles.cedula_input}
+          type="number"
+          placeholder="cedula cliente"
+          value={cedula}
+          onInput={handleInputChange}
+          onChange={(e) => e.preventDefault()}
+        />
+        <span className={styles.price}>${totalPrice}</span>
+
         <button className={styles.btn_verde} onClick={generatePayment}>
           vender
         </button>
-
-        <span className={styles.price}>${totalPrice}</span>
       </div>
     </div>
   );

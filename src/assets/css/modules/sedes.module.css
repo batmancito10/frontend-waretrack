@@ -1,12 +1,11 @@
 .container_cards {
   width: 100%;
-  height: min-content;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  place-items: center;
   gap: 2rem;
-  padding: 2rem;
   border-radius: 10px;
-  margin-bottom: 4rem;
+  padding-bottom: 2rem;
 }
 
 .card {
@@ -46,6 +45,7 @@
 .title {
   font-weight: 700;
 }
+
 .card_location {
   color: gray;
   font-weight: 500;

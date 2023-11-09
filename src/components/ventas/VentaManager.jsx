@@ -18,6 +18,20 @@ function VentaManager({
     }
   }
 
+  function handleInputChange(event, prd) {
+    const inputValue = parseInt(event.target.value, 10);
+
+    if (!isNaN(inputValue) && inputValue >= 1 && inputValue <= prd.stock) {
+      const updatedProducts = products.map((product) => {
+        if (product.value === prd.value) {
+          return { ...product, amount: inputValue };
+        }
+        return product;
+      });
+
+      setSelecteProducts(updatedProducts);
+    }
+  }
   return (
     <div className={styles.manager_container}>
       <table className={styles.table}>
@@ -26,45 +40,45 @@ function VentaManager({
           <th>Producto</th>
           <th>Precio</th>
           <th>Cantidad</th>
+          <th>stock</th>
         </tr>
         {products.map((prd) => {
           const { label, value, price, amount, image, stock } = prd;
-
           return (
             <tr key={value} className={styles.item}>
               <td className={styles.item_icon}>
                 {image ? (
-                  <img src={image} alt={`image of product ${label}`} />
+                  <img
+                    className={styles.item_icon}
+                    src={image}
+                    alt={`image of product ${label}`}
+                  />
                 ) : (
-                  <img src={icons.carrot} alt={`image of product ${label}`} />
+                  <img
+                    className={styles.item_icon}
+                    src={icons.carrot}
+                    alt={`image of product ${label}`}
+                  />
                 )}
               </td>
-              <td className="product-name">{label}</td>
+              <td className={styles.product_name}>{label}</td>
               <td className="product-price">${price}</td>
 
               <td className={styles.container_icons}>
                 <input
                   className={styles.amount}
-                  defaultValue={amount}
                   type="number"
-                  min={1}
-                  max={stock}
+                  value={amount}
+                  onInput={(e) => handleInputChange(e, prd)}
+                  onChange={(e) => e.preventDefault()}
                   name={label}
-                  onChange={(e) => {
-                    const newProducts = products.map((product) => {
-                      if (product.value === value) {
-                        product.amount = Number(e.target.value);
-                      }
-                      return product;
-                    });
-                    setSelecteProducts(newProducts);
-                  }}
                 />
                 <img
                   src={icons.trash}
                   onClick={() => handleDelete('producto', value)}
                 />
               </td>
+              <td>{stock - amount}</td>
             </tr>
           );
         })}
