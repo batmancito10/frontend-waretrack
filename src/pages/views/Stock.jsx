@@ -1,13 +1,9 @@
-import AgregarProductos from '../../components/modals/stock/AgregarProductos';
-import SedesStock from '../../containers/SedesStock';
+import SedesStock from "../../containers/SedesStock.jsx"
 
 function Stock() {
-  return (
-    <>
-      <AgregarProductos />
-      <SedesStock />
+    return <>
+    <SedesStock/>
     </>
-  );
 }
 
 export default Stock;

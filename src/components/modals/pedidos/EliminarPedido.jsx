@@ -1,7 +1,7 @@
-function EliminarPedido() {
+function EliminarPedido({idPedidoEliminar}) {
     const accessToken = localStorage.getItem('accessToken')
-    const eliminarPedidoRequest = async(idPedido) => {
-        const response = await fetch(`${import.meta.env.VITE_PROVEEDOR}${idPedido}/`, {
+    const eliminarPedidoRequest = async() => {
+        const response = await fetch(`${import.meta.env.VITE_PEDIDO}${idPedidoEliminar}/`, {
             mode: 'cors',
             method: 'delete',
             headers: {'Authorization': `Bearer ${accessToken}`}

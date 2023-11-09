@@ -17,6 +17,8 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
     const [proveedorList, setProveedorList] = useState([])
     const [proveedorSelected, setProveedorSelected] = useState([]);
 
+    const [productoList, setProductoList] = useState([])
+
     const estadoList = [
         { value: 0, label: 'Recibido' },
         { value: 1, label: 'No recibido' }
@@ -92,6 +94,27 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
             });
     }, [pedidoSeleccionadoEditar])
 
+    useEffect(() => {
+        fetch(import.meta.env.VITE_PRODUCTO, {
+            mode: 'cors',
+            method: 'get',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        }).then((res) => res.json())
+            .then((data) => {
+                const dataTransformedProducto = data.map((producto) => ({
+                    value: producto.id,
+                    label: producto.nombre,
+                }))
+
+                setProductoList(dataTransformedProducto)
+                setDataRecived(true)
+            }).catch((error) => {
+                console.error('Hubo un error al obtener las opciones:', error);
+            });
+    }, [])
+
     const pedidoEspecificoRequest = async () => {
         if (!pedidoSeleccionadoEditar) return;
 
@@ -106,6 +129,8 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
             console.error('Pedido no encontrado o es nulo/undefined.');
             return;
         }
+
+        console.log(pedidoo)
 
         const sedeResponse = await fetch(`${import.meta.env.VITE_SEDE}${pedidoo.sede}/`, {
             mode: 'cors',
@@ -172,57 +197,43 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
         }
     }, [pedidoSeleccionadoEditar])
 
-    const handleSelectedChange = (selectedOption, setValueElement) => {
-        setValueElement(selectedOption)
-    }
-
     const [productosEditados, setProductosEditados] = useState([]);
+    const [nombreProducto, setNombreProducto] = useState('')
 
-    const handleInputChange = (event, id, field) => {
+    const [productos, setProductos] = useState([]);
+
+    const handleInputChange = (event, productId, field) => {
         const { value } = event.target;
 
-        // Encuentra el índice del producto en el array de productos editados
-        const productoIndex = productosEditados.findIndex(producto => producto.id === id);
+        // Encuentra el producto correspondiente en el estado local
+        const productosActualizados = pedido.producto.map(producto => {
+            if (producto.id === productId) {
+                return { ...producto, [field]: value };
+            }
+            return producto;
+        });
 
-        if (productoIndex !== -1) {
-            // Si el producto ya existe en el array, actualiza su información editada
-            setProductosEditados(prevProductos => {
-                const nuevosProductos = [...prevProductos];
-                nuevosProductos[productoIndex][field] = value;
-                return nuevosProductos;
-            });
-        } else {
-            // Si el producto no existe en el array, agrégalo con la información editada
-            setProductosEditados(prevProductos => [
-                ...prevProductos,
-                { id: id, [field]: value }
-            ]);
-        }
+        // Actualiza el estado con los productos editados
+        setProductos(productosActualizados);
     };
 
+    const [pedidoEditado, setPedidoEditado] = useState([])
 
     const editarPedidoRequest = async (e) => {
         e.preventDefault()
 
-        const data = {
-            funcionario: funcionarioSelected,
-            proveedor: proveedorSelected,
-            estado: estadoSelected,
-            sede: sedeSelected,
-            producto: productosEditados
-        }
-
-        console.log(data)
+        console.log(`${import.meta.env.VITE_PEDIDO}${pedidoSeleccionadoEditar}/`)
+        console.log(pedidoEditado)
 
         try {
             const response = await fetch(`${import.meta.env.VITE_PEDIDO}${pedidoSeleccionadoEditar}/`, {
                 mode: 'cors',
-                method: 'patch',
+                method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(pedidoEditado)
             })
 
             if (response.ok) {
@@ -235,17 +246,17 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
         }
     }
 
-    useEffect(() => {
-        setTitle('Editar pedido')
-        editarPedidoRequest()
-        .then((data) => {
-            setPedido(data)
-        })
-    }, [])
+    const [rows, setRows] = useState([]);
+
+    const handleProductChange = (index, selectedOption) => {
+        const newRows = [...rows];
+        newRows[index].producto = selectedOption;
+        setRows(newRows);
+    };
+
 
     return (
         <div className="modal fade" id="editarPedido" tabIndex="-1" role="dialog" aria-labelledby="exampleModalMessageTitle" aria-hidden="true">
-            {/* {console.log(pedido)} */}
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -254,7 +265,7 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form id='editarPedido' onSubmit={editarPedidoRequest}>
+                    <form id='editarPedidoSeleccionado' onSubmit={editarPedidoRequest}>
                         <div className="modal-body">
                             <div className="form-group d-flex">
                                 <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
@@ -266,9 +277,13 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                                             name="funcionario"
                                             options={proveedorList}
                                             className="w-65"
-                                            onChange={(selectedOption =>
-                                                handleSelectedChange(selectedOption, setProveedorSelected)
-                                            )}
+                                            onChange={(selectedOption) => {
+                                                setProveedorSelected(selectedOption);
+                                                setPedidoEditado({
+                                                    ...pedidoEditado,
+                                                    proveedor: selectedOption.value
+                                                });
+                                            }}
                                             value={proveedorSelected}
                                         />
                                     ) : (
@@ -288,9 +303,13 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                                             name="funcionario"
                                             options={funcionarioList}
                                             className="w-65"
-                                            onChange={(selectedOption =>
-                                                handleSelectedChange(selectedOption, setFuncionarioSelected)
-                                            )}
+                                            onChange={(selectedOption) => {
+                                                setFuncionarioSelected(selectedOption);
+                                                setPedidoEditado({
+                                                    ...pedidoEditado,
+                                                    funcionario: selectedOption.value
+                                                });
+                                            }}
                                             value={funcionarioSelected}
                                         />
                                     ) : (
@@ -310,9 +329,13 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                                             name="sede"
                                             options={sedeList}
                                             className="w-65"
-                                            onChange={(selectedOption =>
-                                                handleSelectedChange(selectedOption, setSedeSelected)
-                                            )}
+                                            onChange={(selectedOption) => {
+                                                setSedeSelected(selectedOption);
+                                                setPedidoEditado({
+                                                    ...pedidoEditado,
+                                                    sede: selectedOption.value
+                                                });
+                                            }}
                                             value={sedeSelected}
                                         />
                                     ) : (
@@ -332,9 +355,13 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                                             name="sede"
                                             options={estadoList}
                                             className="w-65"
-                                            onChange={(selectedOption =>
-                                                handleSelectedChange(selectedOption, setEstadoSelected)
-                                            )}
+                                            onChange={(selectedOption) => {
+                                                setEstadoSelected(selectedOption);
+                                                setPedidoEditado({
+                                                    ...pedidoEditado,
+                                                    estado: selectedOption.value
+                                                });
+                                            }}
                                             value={estadoSelected}
                                         />
                                     ) : (
@@ -363,24 +390,41 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                                                             <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Precio unitario</th>
                                                         </tr>
                                                     </thead>
+
                                                     {pedido?.producto?.map(producto => {
                                                         return <tbody key={producto.id}>
                                                             <tr>
                                                                 <td>
                                                                     <div className="d-flex px-2">
-                                                                        <div className="my-auto">
-                                                                            <input type="text" name="nombreProd" className="form-control w-65" value={producto.producto.nombre} onChange={(e) => handleInputChange(e, producto.id, 'nombreProd')} />
-                                                                        </div>
+                                                                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                                        {dataReceived ? (
+                                                                            <Select
+                                                                                name="producto"
+                                                                                options={productoList}
+                                                                                className="w-65"
+                                                                                onChange={(selectedOption) => {
+                                                                                    handleProductChange(index, selectedOption.value)
+                                                                                }}
+                                                                                value={rows.producto}
+                                                                            />
+
+                                                                        ) : (
+                                                                            <select className="form-select w-65">
+                                                                                <option value="">Loading...</option>
+                                                                            </select>
+                                                                        )}
+                                                                    </div>
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <input type="text" name="cantidadProd" className="form-control w-65" value={producto.cantidad} onChange={(e) => handleInputChange(e, producto.id, 'cantidadProd')} />
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" name="precioUnitarioProd" className="form-control w-65" value={producto.precio_unitario}  onChange={(e) => handleInputChange(e, producto.id, 'precioUnitarioProd')} />
+                                                                    <input type="text" name="precioUnitarioProd" className="form-control w-65" value={producto.precio_unitario} onChange={(e) => handleInputChange(e, producto.id, 'precioUnitarioProd')} />
                                                                 </td>
                                                             </tr>
                                                         </tbody>
+
                                                     })}
                                                 </table>
                                             </div>
@@ -389,9 +433,9 @@ function EditarPedido({ pedidoSeleccionadoEditar }) {
                                 </div>
                             </div>
                         </div>
-                    <div className="modal-footer">
-                        <button type="submit" className="btn bg-gradient-primary" data-bs-dismiss="modal" form="editarPedido">Aceptar</button>
-                    </div>
+                        <div className="modal-footer">
+                            <button type="submit" className="btn bg-gradient-primary" data-bs-dismiss="modal" form="editarPedidoSeleccionado">Aceptar</button>
+                        </div>
                     </form>
                 </div>
             </div>
