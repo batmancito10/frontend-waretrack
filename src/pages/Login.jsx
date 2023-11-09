@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
+import googleIcon from '../assets/img/logos/Google__G__Logo.png'
 import Lottie from 'lottie-react'; // Importa la biblioteca Lottie
 import animationData from '/src/assets/lottie/ondas2.json'; // Reemplaza con la ruta correcta al archivo JSON
 // import Loader from '../components/Loader.jsx'
@@ -155,7 +156,7 @@ function Login () {
                             Ingresar
                         </button>
                         <button type="button" className='btn btn-outline w-100 d-flex gap-2 justify-content-center align-items-center' onClick={iniciarSesionGoogle}>
-                            <img src="/src/assets/img/logos/Google__G__Logo.png" alt="" />
+                            <img src={googleIcon} alt="image to google login" />
                             Inicia sesión con Google
                         </button>
                         </div>
