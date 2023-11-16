@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import FormUsuario from './FormUsuario';
+import PropTypes from 'prop-types';
 import './FormularioUsuario.css';
 
 function AgregarUsuario({
   agregarUsuarioModal,
+  setAgregarUsuarioModal,
   setDataParent,
   sedeRequest,
   sedes,
@@ -58,7 +60,7 @@ function AgregarUsuario({
   const addUser = async (e) => {
     e.preventDefault();
     agregarUsuario()
-      .then((response) => {
+      .then(() => {
         document.querySelector('#closeAgregarUsuario').click();
         setDataParent(false);
       })
@@ -67,6 +69,7 @@ function AgregarUsuario({
   };
 
   const limpiarFormulario = () => {
+    setAgregarUsuarioModal(false);
     setValues({
       password: '',
       first_name: '',
@@ -86,66 +89,55 @@ function AgregarUsuario({
         setSedes(data);
         groupRequest().then((data) => {
           setGroups(data);
-          //setDataReceived(true)
         });
       });
     }
   }, [agregarUsuarioModal]);
 
   return (
-    <div
-      className={agregarUsuarioModal ? 'modal fade show' : 'modal fade'}
-      id="modal-agregar-usuario"
-      tabIndex="-1"
-      role="dialog"
-      aria-labelledby="modal-agregar-usuario"
-      aria-hidden="true"
-    >
-      <div
-        className="modal-dialog modal-dialog-centered modal-lg"
-        role="document"
-      >
-        <div className="modal-content">
-          <div className="modal-body p-0">
-            <div className="card card-plain">
-              <div className="card-header text-left">
-                <h3 className="font-weight-bolder">Agregar Usuario</h3>
-              </div>
-              <div className="card-body p-4 ">
-                <FormUsuario
-                  values={values}
-                  inputHandler={inputHandler}
-                  sedes={sedes}
-                  dataReceived={dataReceived}
-                  id={'Agregar'}
-                  onSubmit={addUser}
-                  groups={groups}
-                  setValues={setValues}
-                  setDataReceived={setDataReceived}
-                  editarUsuarioModal={false}
-                />
-              </div>
-              <div className="card card-footer">
-                <div className="d-flex justify-content-end gap-2">
-                  <button
-                    className="btn btn-secondary"
-                    type="button"
-                    data-bs-dismiss="modal"
-                    id="closeAgregarUsuario"
-                    onClick={limpiarFormulario}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    type="submit"
-                    form="AgregarUsuario"
-                  >
-                    Agregar
-                  </button>
-                </div>
-              </div>
-            </div>
+    <div className={agregarUsuarioModal ? ' overlay modal_open' : 'overlay'}>
+      <div className="container_card">
+        <div className="card-header text-left">
+          <h3
+            className="font-weight-bolder"
+            onClick={() => setAgregarUsuarioModal(true)}
+          >
+            Agregar Usuario
+          </h3>
+        </div>
+
+        <div className="card-body p-4 ">
+          <FormUsuario
+            values={values}
+            inputHandler={inputHandler}
+            sedes={sedes}
+            dataReceived={dataReceived}
+            id={'Agregar'}
+            onSubmit={addUser}
+            groups={groups}
+            setValues={setValues}
+            setDataReceived={setDataReceived}
+            editarUsuarioModal={false}
+          />
+        </div>
+        <div className="card card-footer">
+          <div className="d-flex justify-content-end gap-2">
+            <button
+              className="btn btn-secondary"
+              type="button"
+              data-bs-dismiss="modal"
+              id="closeAgregarUsuario"
+              onClick={limpiarFormulario}
+            >
+              Cancelar
+            </button>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              form="AgregarUsuario"
+            >
+              Agregar
+            </button>
           </div>
         </div>
       </div>
@@ -154,3 +146,19 @@ function AgregarUsuario({
 }
 
 export default AgregarUsuario;
+
+AgregarUsuario.propTypes = {
+  agregarUsuarioModal: PropTypes.bool.isRequired,
+  setAgregarUsuarioModal: PropTypes.func.isRequired,
+  setDataParent: PropTypes.func.isRequired,
+  sedeRequest: PropTypes.func.isRequired,
+  sedes: PropTypes.array.isRequired,
+  setSedes: PropTypes.func.isRequired,
+  groups: PropTypes.array.isRequired,
+  setGroups: PropTypes.func.isRequired,
+  groupRequest: PropTypes.func.isRequired,
+};
+
+/* 
+  
+*/

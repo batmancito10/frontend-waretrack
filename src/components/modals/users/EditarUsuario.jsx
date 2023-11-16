@@ -96,12 +96,11 @@ function EditarUsuario({
   };
 
   useEffect(() => {
-    if (editarUsuarioModal && sedes === '') {
+    if (sedes === '') {
       sedeRequest().then((data) => {
         setSedes(data);
         groupRequest().then((data) => {
           setGroups(data);
-          //setDataReceived(true)
         });
       });
     }
@@ -119,65 +118,49 @@ function EditarUsuario({
       });
       //.map(item => item.id)
     }
-  }, [editarUsuarioModal, usuario]);
+  }, [usuario]);
 
   return (
-    <div
-      className={editarUsuarioModal ? 'modal fade show' : 'modal fade'}
-      id="modal-editar-usuario"
-      tabIndex="-1"
-      role="dialog"
-      aria-labelledby="modal-editar-usuario"
-      aria-hidden="true"
-      style={{ zIndex: '99999999999' }}
-    >
-      <div
-        className="modal-dialog modal-dialog-centered modal-lg"
-        role="document"
-      >
-        <div className="modal-content">
-          <div className="modal-body p-0">
-            <div className="card card-plain">
-              <div className="card-header text-left">
-                <h3 className="font-weight-bolder">Editar Usuario</h3>
-              </div>
-              <div className="card-body p-4 ">
-                <FormUsuario
-                  values={values}
-                  inputHandler={inputHandler}
-                  sedes={sedes}
-                  dataReceived={dataReceived}
-                  id={'Editar'}
-                  onSubmit={editUser}
-                  groups={groups}
-                  setValues={setValues}
-                  setDataReceived={setDataReceived}
-                  editarUsuarioModal={editarUsuarioModal}
-                  setEditarUsuarioModal={setEditarUsuarioModal}
-                />
-              </div>
-              <div className="card card-footer">
-                <div className="d-flex justify-content-end gap-2">
-                  <button
-                    className="btn btn-secondary"
-                    type="button"
-                    data-bs-dismiss="modal"
-                    id="closeEditarUsuario"
-                    onClick={() => {
-                      limpiarFormulario();
-                      setEditarUsuarioModal(false);
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    type="submit"
-                    form="EditarUsuario"
-                  >
-                    Editar
-                  </button>
-                </div>
+    <div className={editarUsuarioModal ? ' overlay modal_open' : 'overlay'}>
+      <div className="container_card">
+        <div className="modal-body p-0">
+          <div className="card card-plain">
+            <div className="card-header text-left">
+              <h3 className="font-weight-bolder">Editar Usuario</h3>
+            </div>
+            <div className="card-body p-4 ">
+              <FormUsuario
+                values={values}
+                inputHandler={inputHandler}
+                sedes={sedes}
+                dataReceived={dataReceived}
+                id={'Editar'}
+                onSubmit={editUser}
+                groups={groups}
+                setValues={setValues}
+                setDataReceived={setDataReceived}
+                editarUsuarioModal={editarUsuarioModal}
+                setEditarUsuarioModal={setEditarUsuarioModal}
+              />
+            </div>
+            <div className="card card-footer">
+              <div className="d-flex justify-content-end gap-2">
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  onClick={() => {
+                    limpiarFormulario();
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  form="EditarUsuario"
+                >
+                  Editar
+                </button>
               </div>
             </div>
           </div>
