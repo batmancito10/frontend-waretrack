@@ -118,7 +118,7 @@ function Ventas() {
       .then(() => {
         setSelectedSede(null);
         clearForm();
-        window.location.reload()
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

@@ -45,3 +45,15 @@ input[type='number'] {
   padding: 2rem;
   border-radius: 20px;
 }
+
+.small_card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30vw;
+  height: auto;
+  aspect-ratio: 16/9;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+}
