@@ -8,7 +8,7 @@ function Sidebar() {
       className={`${styles.container_sidebar} sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 text-center`}
       id="sidenav-main"
     >
-      <div className='sidenav-header navbar-brand'>
+      <div className="sidenav-header navbar-brand">
         <i
           className="bi bi-x fs-3 p-3 cursor-pointer text-secondary  position-absolute end-0 top-0 d-none d-xl-none"
           aria-hidden="true"
@@ -18,7 +18,7 @@ function Sidebar() {
       </div>
       <hr className="horizontal dark mt-0" />
       <div
-        className={ `${styles.sidebar} collapse navbar-collapse w-auto`}
+        className={`${styles.sidebar} collapse navbar-collapse w-auto`}
         id="sidenav-collapse-main"
       >
         <ul className="navbar-nav">
@@ -69,6 +69,15 @@ function Sidebar() {
                 <img src={svgs.svg3} />
               </div>
               <span className="nav-link-text ms-1">Venta</span>
+            </NavLink>
+          </li>
+
+          <li className="nav-item">
+            <NavLink to="facturas" className={'nav-link'}>
+              <div className="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img src={svgs.svg3} />
+              </div>
+              <span className="nav-link-text ms-1">Facturas</span>
             </NavLink>
           </li>
         </ul>

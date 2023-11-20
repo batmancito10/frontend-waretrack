@@ -1,9 +1,11 @@
-import SedesStock from "../../containers/SedesStock.jsx"
+import SedesStock from '../../containers/SedesStock.jsx';
 
 function Stock() {
-    return <>
-    <SedesStock/>
+  return (
+    <>
+      <SedesStock />
     </>
+  );
 }
 
 export default Stock;

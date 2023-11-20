@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from '../../assets/css/modules/sedes.module.css';
 
 function Sedes({ sedes, setSede, selected }) {
-  const [cardActive, setCardActive] = useState('');
   return (
     <div className={styles.container_cards}>
       {sedes?.map((sd) => (
@@ -26,3 +25,9 @@ function Sedes({ sedes, setSede, selected }) {
 }
 
 export default Sedes;
+
+Sedes.propTypes = {
+  sedes: PropTypes.array.isRequired,
+  setSede: PropTypes.func.isRequired,
+  selected: PropTypes.object,
+};

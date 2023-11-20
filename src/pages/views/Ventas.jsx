@@ -1,10 +1,11 @@
-import PropTypes, { func } from 'prop-types';
+import PropTypes from 'prop-types';
 import Sedes from '../../components/ventas/Sedes';
 import Select from 'react-select';
 import styles from '../../assets/css/modules/ventas.module.css';
 import requestApi from '../../components/utils/requestApi';
 import VentaManager from '../../components/ventas/VentaManager';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { PageTitle } from '../../App';
 
 function Ventas() {
   const [cajaCompleta, setCajaCompleta] = useState({});
@@ -23,6 +24,7 @@ function Ventas() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const cedulaMaxlength = 15;
+  const { setTitle } = useContext(PageTitle);
 
   function getCajaCompleta() {
     const res = requestApi('caja/completa', 'GET');
@@ -154,6 +156,7 @@ function Ventas() {
   }, [selectedSede]);
 
   useEffect(() => {
+    setTitle('Ventas');
     const cajaCompleta = getCajaCompleta();
     cajaCompleta.then((res) => setCajaCompleta(res));
   }, []);
