@@ -11,15 +11,15 @@ function Dashboard() {
     setTitle('Dashboard');
   }, []);
 
-
-
-  return <> 
-  <div className='row mt-4'>
-    <VentasSemana></VentasSemana>
-    <VentasSede></VentasSede>
-  </div>
-    <TotalProductos></TotalProductos>
+  return (
+    <>
+      <div className="row mt-4 mb-3">
+        <VentasSemana></VentasSemana>
+        <VentasSede></VentasSede>
+      </div>
+      <TotalProductos></TotalProductos>
     </>
+  );
 }
 
 export default Dashboard;
