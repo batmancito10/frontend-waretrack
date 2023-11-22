@@ -29,9 +29,16 @@ function DetalleFacturaModal({ showModal, closeModal, facturaInfo }) {
           </div>
 
           <div className="w-100 ">
-            <p className="text-center w-100 d-block font-weight-bold pb-3">
-              PRODUCTOS
-            </p>
+            {facturaInfo.producto.length > 0 ? (
+              <p className="text-center w-100 d-block font-weight-bold pb-3">
+                PRODUCTOS
+              </p>
+            ) : (
+              <p className="text-center w-100 d-block font-weight-bold pb-3">
+                {' '}
+                SIN PRODUCTOS
+              </p>
+            )}
             {facturaInfo.producto.map((p) => (
               <div key={p.id} className="pb-3">
                 <p className="text-ellipsis">{p.nombre}</p>
@@ -43,9 +50,16 @@ function DetalleFacturaModal({ showModal, closeModal, facturaInfo }) {
             ))}
           </div>
 
-          <p className="text-center w-100 d-block font-weight-bold pb-3">
-            SERVICIOS
-          </p>
+          {facturaInfo.servicio.length > 0 ? (
+            <p className="text-center w-100 d-block font-weight-bold pb-3">
+              SERVICIOS
+            </p>
+          ) : (
+            <p className="text-center w-100 d-block font-weight-bold pb-3">
+              {' '}
+              SIN SERVICIOS
+            </p>
+          )}
           {facturaInfo.servicio.map((s) => (
             <div key={s.id} className="pb-3">
               <p className="text-ellipsis">{s.nombre}</p>
@@ -76,5 +90,7 @@ DetalleFacturaModal.propTypes = {
     created_at: PropTypes.string,
     codigo: PropTypes.string,
     cliente: PropTypes.string,
+    servicio: PropTypes.array,
+    producto: PropTypes.array,
   }).isRequired,
 };

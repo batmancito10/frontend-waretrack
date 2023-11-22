@@ -4,6 +4,7 @@
   height: 100%;
   font-family: 'Courier New', Courier, monospace;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /*  modales */
@@ -16,6 +17,18 @@
   display: none;
   justify-content: center;
   align-items: center;
+}
+
+.container_card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 350px;
+  height: 80vh;
+  aspect-ratio: 9/16;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 20px;
 }
 
 .modal_open {
@@ -32,17 +45,6 @@
   }
 }
 
-.container_card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 80vh;
-  aspect-ratio: 9/16;
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 20px;
-}
-
 .small_card {
   display: flex;
   flex-direction: column;
@@ -54,10 +56,6 @@
   padding: 2rem;
   border-radius: 20px;
 }
-
-
-
-
 
 p {
   margin: 0;
