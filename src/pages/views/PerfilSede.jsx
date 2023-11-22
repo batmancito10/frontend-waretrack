@@ -1,24 +1,23 @@
 import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { PageTitle } from '../../App';
 import EditarSede from '../../components/modals/sedes/EditarSede';
 import EliminarSede from '../../components/modals/sedes/EliminarSede';
 
 const PerfilSede = () => {
-  const location = useLocation();
-  const idSede = location.state?.sedeId;
-
+  const { id } = useParams();
   const [sede, setSede] = useState([]);
   const accessToken = localStorage.getItem('accessToken');
   const { setTitle } = useContext(PageTitle);
   const [inputBloqueado, setInputBloqueado] = useState(true);
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
 
   const handleInput = () => {
     setInputBloqueado(!inputBloqueado);
   };
 
   const SedeRequest = async () => {
-    const response = await fetch(`${import.meta.env.VITE_SEDE}${idSede}/`, {
+    const response = await fetch(`${import.meta.env.VITE_SEDE}${id}/`, {
       mode: 'cors',
       method: 'get',
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -120,11 +119,7 @@ const PerfilSede = () => {
                   <li className="nav-item">
                     <a
                       className="nav-link mb-0 px-0 py-1 "
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleModal"
-                      href="#"
-                      role="tab"
-                      aria-selected="false"
+                      onClick={() => setShowModalEliminar(true)}
                     >
                       <svg
                         className="text-dark"
@@ -169,17 +164,19 @@ const PerfilSede = () => {
               </div>
             </div>
             <EditarSede
-              idSede={idSede}
+              id={id}
               inputBloqueado={inputBloqueado}
               handleInput={handleInput}
             />
           </div>
         </div>
       </div>
-      {/* <SedePedidos idProveedor={idProveedor}></SedePedidos> */}
-
-      {/* Modal para poder eliminar un usuario  */}
-      <EliminarSede idSede={idSede} NombreSede={NombreSede}></EliminarSede>
+      <EliminarSede
+        id={id}
+        NombreSede={NombreSede}
+        showModalEliminar={showModalEliminar}
+        setShowModalEliminar={setShowModalEliminar}
+      ></EliminarSede>
     </div>
   );
 };
