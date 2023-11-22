@@ -3,6 +3,7 @@ import requestApi from '../components/utils/requestApi';
 import SidebarProductos from './SidebarProductos';
 import SidebarServicios from './SidebarServicios';
 import Paginacion from '../components/Paginacion';
+import AgregarServicioModal from '../components/modals/AgregarServicioModal';
 
 function CardCategorias() {
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
@@ -14,6 +15,8 @@ function CardCategorias() {
 
   const [servicios, setServicios] = useState([]);
   const [productos, setProductos] = useState([]);
+
+  const [agregarServicioModal, setAgregarServicioModal] = useState(false);
 
   function obtenerServicios() {
     requestApi('/servicio', 'GET', {}).then((response) =>
@@ -67,9 +70,16 @@ function CardCategorias() {
       <div className="col-lg-12">
         <div className="card h-auto">
           <div className="card-header pb-0 p-3">
-            <div className="row">
-              <div className="col-6 d-flex align-items-center">
+            <div className="flex flex-row">
+              <div className="col-6 d-flex align-items-center w-100 justify-content-between">
                 <h6 className="mb-0">Servicios</h6>
+                <button
+                  type="button"
+                  className="btn btn-sm bg-gradient-info mb-0"
+                  onClick={() => setAgregarServicioModal(true)}
+                >
+                  +
+                </button>
               </div>
             </div>
           </div>
@@ -192,6 +202,13 @@ function CardCategorias() {
           mostrarPanelProducto={mostrarPanelProducto}
           productoSeleccionado={productoSeleccionado}
           cerrarPanelProducto={cerrarPanelProducto}
+        />
+      )}
+
+      {agregarServicioModal && (
+        <AgregarServicioModal
+          agregarServicioModal={agregarServicioModal}
+          setAgregarServicioModal={setAgregarServicioModal}
         />
       )}
 
