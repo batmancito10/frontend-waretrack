@@ -30,7 +30,7 @@ const AgregarSede = () => {
     nombre: nombre,
     direccion: direccion,
     ciudad: ciudad,
-    company: userInfo?.company.id,
+    company: userInfo?.company?.id,
   };
 
   function agregarSede() {
