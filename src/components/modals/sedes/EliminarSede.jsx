@@ -1,23 +1,20 @@
 import { useNavigate } from 'react-router';
 
-function EliminarProveedor({ idProveedor, nombreProveedor }) {
+function EliminarSede({ idSede, NombreSede }) {
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
 
-  const eliminarProveedorRequest = async () => {
-    const response = await fetch(
-      `${import.meta.env.VITE_PROVEEDOR}${idProveedor}/`,
-      {
-        mode: 'cors',
-        method: 'delete',
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    )
+  const eliminarSedeRequest = async () => {
+    const response = await fetch(`${import.meta.env.VITE_SEDE}${idSede}/`, {
+      mode: 'cors',
+      method: 'delete',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Algo falló');
         }
-        navigate('/pedidos-proveedores');
+        navigate('/dashboard');
       })
       .then((data) => {
         console.log(data);
@@ -41,7 +38,7 @@ function EliminarProveedor({ idProveedor, nombreProveedor }) {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              Eliminar a {nombreProveedor}
+              Eliminar a {NombreSede}
             </h5>
             <button
               type="button"
@@ -53,8 +50,8 @@ function EliminarProveedor({ idProveedor, nombreProveedor }) {
             </button>
           </div>
           <div className="modal-body text-center">
-            ¿Está seguro que desea eliminar al proveedor{' '}
-            <strong>{nombreProveedor}?</strong>
+            ¿Está seguro que desea eliminar a la sede{' '}
+            <strong>{NombreSede}?</strong>
           </div>
           <div className="modal-footer">
             <button
@@ -67,10 +64,10 @@ function EliminarProveedor({ idProveedor, nombreProveedor }) {
             <button
               type="button"
               className="btn bg-gradient-primary"
-              onClick={eliminarProveedorRequest}
+              onClick={eliminarSedeRequest}
               data-bs-dismiss="modal"
             >
-              Eliminar proveedor
+              Eliminar sede
             </button>
           </div>
         </div>
@@ -79,4 +76,4 @@ function EliminarProveedor({ idProveedor, nombreProveedor }) {
   );
 }
 
-export default EliminarProveedor;
+export default EliminarSede;
