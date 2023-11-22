@@ -35,7 +35,7 @@ const AgregarServicioModal = ({
       .then(() => {
         setAgregarServicioModal(false);
       })
-      .catch(alert('la peticion fallo, por favor rectifica la informacion'));
+      .catch((err) => console.log(err));
   }
 
   const sedeRequest = async () => {
