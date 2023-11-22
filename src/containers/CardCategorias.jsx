@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import requestApi from '../components/utils/requestApi';
 import SidebarProductos from './SidebarProductos';
 import SidebarServicios from './SidebarServicios';
+import Paginacion from '../components/Paginacion';
 
 function CardCategorias() {
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
@@ -14,8 +15,6 @@ function CardCategorias() {
   const [servicios, setServicios] = useState([]);
   const [productos, setProductos] = useState([]);
 
-  //   const { setTitle } = useContext(PageTitle);
-
   function obtenerServicios() {
     requestApi('/servicio', 'GET', {}).then((response) =>
       setServicios(response)
@@ -27,11 +26,6 @@ function CardCategorias() {
       setProductos(response)
     );
   }
-
-  //   function editarServicio() {
-  //     setModoEdicionServicio(true);
-  //     abrirPanelServicio();
-  //   }
 
   function abrirPanelServicio() {
     setMostrarPanelProducto(false);
@@ -56,6 +50,17 @@ function CardCategorias() {
     obtenerProductos();
     return () => {};
   }, []);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [productos]);
+
+  const pageCount = Math.ceil(productos?.length / itemsPerPage);
+  const startIdx = (currentPage - 1) * itemsPerPage;
+  const visibleData = productos?.slice(startIdx, startIdx + itemsPerPage);
 
   return (
     <>
@@ -115,8 +120,8 @@ function CardCategorias() {
           </div>
           <div className="card-body p-3 pb-0">
             <ul className="list-group">
-              {Array.isArray(productos) ? (
-                productos.map((producto) => (
+              {Array.isArray(visibleData) ? (
+                visibleData.map((producto) => (
                   <li
                     className="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg"
                     onClick={() => {
@@ -147,6 +152,11 @@ function CardCategorias() {
                 </div>
               )}
             </ul>
+            <Paginacion
+              currentPage={currentPage}
+              pageCount={pageCount}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         </div>
 
