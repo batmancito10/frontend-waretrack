@@ -4,14 +4,17 @@ import SidebarProductos from './SidebarProductos';
 import SidebarServicios from './SidebarServicios';
 import Paginacion from '../components/Paginacion';
 import AgregarServicioModal from '../components/modals/AgregarServicioModal';
+import AgregarProducto from './AgregarProducto';
 
 function CardCategorias() {
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   const [mostrarPanelServicio, setMostrarPanelServicio] = useState(false);
-
   const [mostrarPanelProducto, setMostrarPanelProducto] = useState(false);
+
+  const [mostrarPanelAgregarProducto, setMostrarPanelAgregarProducto] =
+    useState(false);
 
   const [servicios, setServicios] = useState([]);
   const [productos, setProductos] = useState([]);
@@ -126,8 +129,15 @@ function CardCategorias() {
         <div className="card h-auto mt-3">
           <div className="card-header pb-0 p-3">
             <div className="row">
-              <div className="col-6 d-flex align-items-center">
+              <div className="col-6 d-flex align-items-center justify-content-between w-100 ">
                 <h6 className="mb-0">Productos</h6>
+                <button
+                  type="button"
+                  className="btn btn-sm bg-gradient-info mb-0"
+                  onClick={() => setMostrarPanelAgregarProducto(true)}
+                >
+                  +
+                </button>
               </div>
             </div>
           </div>
@@ -211,6 +221,13 @@ function CardCategorias() {
           </div>
         </div>
       </div>
+
+      {mostrarPanelAgregarProducto && (
+        <AgregarProducto
+          mostrarPanelAgregarProducto={mostrarPanelAgregarProducto}
+          setMostrarPanelAgregarProducto={setMostrarPanelAgregarProducto}
+        />
+      )}
 
       {mostrarPanelProducto && (
         <SidebarProductos

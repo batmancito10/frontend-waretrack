@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import requestApi from '../utils/requestApi';
 
 const AgregarServicioModal = ({
   agregarServicioModal,
@@ -10,7 +11,7 @@ const AgregarServicioModal = ({
   const [sedes, setSedes] = useState('');
   const [groups, setGroups] = useState('');
   const [groupList, setGroupList] = useState('');
-  const [sedeList, setSedeList] = useState('');
+  const [sedeList, setSedeList] = useState([]);
   const [sedeSelected, setSedeSelected] = useState([]);
   const [groupSelected, setGroupSelected] = useState([]);
   const [dataReceived, setDataReceived] = useState(false);
@@ -29,28 +30,16 @@ const AgregarServicioModal = ({
     };
   };
 
-  const agregarUsuario = async () => {
-    const response = await fetch(import.meta.env.VITE_SERVICIO, {
-      mode: 'cors',
-      method: 'post',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...values,
-      }),
-    });
-
-    if (response.status !== 201) {
-      throw new Error(' Error al realizar acción, intente nuevamente.');
-    }
-
-    return response;
-  };
+  function agregarServicio() {
+    requestApi('servicio', 'POST', values)
+      .then(() => {
+        setAgregarServicioModal(false);
+      })
+      .catch(alert('la peticion fallo, por favor rectifica la informacion'));
+  }
 
   const sedeRequest = async () => {
-    const response = await fetch(import.meta.env.VITE_SERVICIO, {
+    const response = await fetch(import.meta.env.VITE_SEDE, {
       mode: 'cors',
       method: 'get',
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -61,7 +50,7 @@ const AgregarServicioModal = ({
 
   const addServicio = async (e) => {
     e.preventDefault();
-    agregarUsuario()
+    agregarServicio()
       .then(() => {
         document.querySelector('#closeAgregarUsuario').click();
       })
@@ -131,18 +120,18 @@ const AgregarServicioModal = ({
       );
       setDataReceived(true);
     }
-    if (values['sedes'][0] !== undefined) {
-      setSedeSelected(
-        values['sedes'].map((sede) => {
-          return { value: sede['id'], label: sede['nombre'] };
-        })
-      );
-      setGroupSelected(
-        values['groups'].map((group) => {
-          return { value: group && group['id'], label: group['nombre'] };
-        })
-      );
-    }
+    // if (values['sedes'][0] !== undefined) {
+    //   setSedeSelected(
+    //     values['sedes'].map((sede) => {
+    //       return { value: sede['id'], label: sede['nombre'] };
+    //     })
+    //   );
+    //   setGroupSelected(
+    //     values['groups'].map((group) => {
+    //       return { value: group && group['id'], label: group['nombre'] };
+    //     })
+    //   );
+    // }
   }, [groups, values]);
 
   return (
