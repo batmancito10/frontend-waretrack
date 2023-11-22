@@ -1,0 +1,36 @@
+.modal-container {
+  position: fixed;
+  top: 0px;
+  right: 100%;
+  bottom: 0px;
+  width: 50%;
+  max-width: 360px;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 20px 0 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 0 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.open-modal {
+  right: 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: .5rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}

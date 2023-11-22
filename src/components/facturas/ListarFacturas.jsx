@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import requestApi from '../utils/requestApi';
 import { useParams } from 'react-router-dom';
-import styles from '../../assets/css/modules/listarFacturas.module.css';
 import DetalleFacturaModal from './DetalleFacturaModal';
+import styles from '../../assets/css/modules/listarFacturas.module.css';
 
 function ListarFacturas() {
   const [facturas, setFacturas] = useState([]);

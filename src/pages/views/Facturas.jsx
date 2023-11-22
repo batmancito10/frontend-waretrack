@@ -1,14 +1,22 @@
 import { useContext, useEffect, useState } from 'react';
 import { PageTitle } from '../../App';
-import styles from '../../assets/css/modules/facturas.module.css';
 import requestApi from '../../components/utils/requestApi';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../assets/css/modules/facturas.module.css';
 
 function Facturas() {
   const { setTitle } = useContext(PageTitle);
   const [selectedSede, setSelectedSede] = useState({});
   const [allSedes, setAllSedes] = useState([]);
   const navigate = useNavigate();
+
+  function goToFacturas(sedeId) {
+    const timerId = setTimeout(() => {
+      navigate(`/facturas/lista/${sedeId}`);
+    }, 300);
+
+    return () => clearTimeout(timerId);
+  }
 
   useEffect(() => {
     setTitle('Facturas');
@@ -39,7 +47,7 @@ function Facturas() {
             }`}
             onClick={() => {
               setSelectedSede(sede);
-              navigate(`/facturas/lista/${sede.id}`);
+              goToFacturas(sede.id);
             }}
           >
             <h4>{sede.ciudad}</h4>

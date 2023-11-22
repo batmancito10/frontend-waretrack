@@ -6,32 +6,27 @@
 }
 
 .container_cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(clamp(300px, 25vw, 400px), 1fr)
-  );
-  place-items: center;
-  gap: 2rem;
-  border-radius: 10px;
+  padding: 0 15px;
 }
 
 .card {
   text-align: center;
-  width: clamp(200px, 25vw, 400px);
-  height: auto;
-  aspect-ratio: 1;
-  width: 100%;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 3px 3px 6px silver;
   display: flex;
-  gap: 2rem;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+  margin: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
   transform: scale(1);
-  transition: transform 0.2s ease-out, background-color 0.2s ease-out;
 }
 
 .card:hover {

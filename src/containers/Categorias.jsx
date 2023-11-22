@@ -7,6 +7,7 @@ function CategoriasCard() {
   const [mostrarPanel, setMostrarPanel] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [categorias, setCategorias] = useState([]);
+
   const { setTitle } = useContext(PageTitle);
   const accessToken = localStorage.getItem('accessToken');
 
@@ -21,22 +22,22 @@ function CategoriasCard() {
     return jsonResponse;
   };
 
-  const togglePanel = () => {
+  const abrirPanel = () => {
     setMostrarPanel(true);
   };
 
-  const ocultar = () => {
+  const cerrarPanel = () => {
     setMostrarPanel(false);
   };
 
-  const edicion = (id) => {
-    togglePanel();
+  const editarCategoria = (id) => {
+    abrirPanel();
     setCategoriaSeleccionada(id);
     setModoEdicion(true);
   };
 
-  const agregar = () => {
-    togglePanel();
+  const agregarCategoria = () => {
+    abrirPanel();
     setModoEdicion(false);
   };
 
@@ -50,6 +51,7 @@ function CategoriasCard() {
         console.log('Ha ocurrido un error en la peticion: ', error);
       });
   }, []);
+
   return (
     <>
       <div className="col-lg-12 col-md-6">
@@ -59,7 +61,7 @@ function CategoriasCard() {
             <button
               type="button"
               className="btn btn-sm bg-gradient-info mb-0"
-              onClick={agregar}
+              onClick={agregarCategoria}
             >
               +
             </button>
@@ -72,7 +74,7 @@ function CategoriasCard() {
                       <div
                         className="timeline-block mb-3"
                         key={categoria.id}
-                        onClick={() => edicion(categoria.id)}
+                        onClick={() => editarCategoria(categoria.id)}
                         style={{ cursor: 'pointer' }}
                       >
                         <span className="timeline-step">
@@ -98,17 +100,19 @@ function CategoriasCard() {
         </div>
       </div>
       {modoEdicion === true ? (
+        //  Para cuando se edite una categoria
         <SidebarCategorias
           modoEdicion={modoEdicion}
           categoriaSeleccionada={categoriaSeleccionada}
           mostrarPanel={mostrarPanel}
-          ocultar={ocultar}
+          cerrarPanel={cerrarPanel}
         />
       ) : (
+        //  Para cuando se agregue una categoria
         <SidebarCategorias
           modoEdicion={modoEdicion}
           mostrarPanel={mostrarPanel}
-          ocultar={ocultar}
+          cerrarPanel={cerrarPanel}
         />
       )}
     </>

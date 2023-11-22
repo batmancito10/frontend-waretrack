@@ -6,7 +6,7 @@ function SidebarCategorias({
   modoEdicion,
   mostrarPanel,
   categoriaSeleccionada,
-  ocultar,
+  cerrarPanel,
 }) {
   const accessToken = localStorage.getItem('accessToken');
   const { setTitle } = useContext(PageTitle);
@@ -49,6 +49,7 @@ function SidebarCategorias({
   ];
 
   const [handleEditar, setHandleEditar] = useState(false);
+
   const onHandleEditar = () => {
     setHandleEditar(!handleEditar);
   };
@@ -176,7 +177,7 @@ function SidebarCategorias({
                 <div className="float-end mt-4">
                   <button
                     className="btn btn-link text-dark p-0 fixed-plugin-close-button"
-                    onClick={() => ocultar()}
+                    onClick={() => cerrarPanel()}
                   >
                     <i className="fa fa-close"></i>
                   </button>
@@ -259,8 +260,11 @@ function SidebarCategorias({
                     </div>
                   </div>
                   <div className="float-end mt-4">
-                    <button className="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                      <i className="fa fa-close" onClick={ocultar}></i>
+                    <button
+                      className="btn btn-link text-dark p-0"
+                      onClick={cerrarPanel}
+                    >
+                      <i className="fa fa-close"></i>
                     </button>
                   </div>
                 </div>
@@ -350,7 +354,10 @@ function SidebarCategorias({
                 </div>
               </div>
               <div className="float-end mt-4">
-                <button className="btn btn-link text-dark p-0 fixed-plugin-close-button">
+                <button
+                  className="btn btn-link text-dark p-0"
+                  onClick={cerrarPanel}
+                >
                   <i className="fa fa-close"></i>
                 </button>
               </div>
@@ -416,5 +423,5 @@ SidebarCategorias.propTypes = {
   modoEdicion: PropTypes.bool,
   mostrarPanel: PropTypes.bool,
   categoriaSeleccionada: PropTypes.number,
-  ocultar: PropTypes.func,
+  cerrarPanel: PropTypes.func,
 };
