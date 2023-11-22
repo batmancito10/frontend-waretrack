@@ -167,27 +167,27 @@ function AgregarProducto({
                   />
                 </div>
               </div>
-
-              <div className="form-group d-flex">
-                <div
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    alignItems: 'start',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <label htmlFor="recipient-name" className="col-form-label">
-                    Categoría:
-                  </label>
-                  <Select
-                    options={categorias.map((categoria) => ({
-                      value: categoria.id,
-                      label: categoria.nombre,
-                    }))}
-                    onChange={(e) => setCategoriaSeleccionada(e.value)}
-                  />
-                </div>
+            </div>
+            <div className="form-group d-flex ">
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'start',
+                  flexDirection: 'column',
+                }}
+              >
+                <label htmlFor="recipient-name" className="col-form-label">
+                  Categoría:
+                </label>
+                <Select
+                  className="w-100"
+                  options={categorias.map((categoria) => ({
+                    value: categoria.id,
+                    label: categoria.nombre,
+                  }))}
+                  onChange={(e) => setCategoriaSeleccionada(e.value)}
+                />
               </div>
             </div>
 
