@@ -32,7 +32,7 @@ function Router() {
               element={<PedidosProveedores />}
             />
             <Route path="detalle-proveedor" element={<PerfilProveedor />} />
-            <Route path="detalle-sede" element={<PerfilSede />} />
+            <Route path="detalle-sede/:id" element={<PerfilSede />} />
             <Route
               path="categorias-servicios"
               element={<CategoriasServicios />}

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { PageTitle } from '../../../App';
 import Select from 'react-select';
 
-const EditarSede = ({ idSede, inputBloqueado }) => {
+const EditarSede = ({ id, inputBloqueado }) => {
   const [sede, setSede] = useState([]);
   const accessToken = localStorage.getItem('accessToken');
   const { setTitle } = useContext(PageTitle);
@@ -35,7 +35,7 @@ const EditarSede = ({ idSede, inputBloqueado }) => {
 
   useEffect(() => {
     setTitle('Perfil Sede');
-    fetch(`${import.meta.env.VITE_SEDE}${idSede}/`, {
+    fetch(`${import.meta.env.VITE_SEDE}${id}/`, {
       mode: 'cors',
       method: 'get',
       headers: {
@@ -101,7 +101,7 @@ const EditarSede = ({ idSede, inputBloqueado }) => {
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SEDE}${idSede}/`, {
+      const response = await fetch(`${import.meta.env.VITE_SEDE}${id}/`, {
         mode: 'cors',
         method: 'put',
         headers: {

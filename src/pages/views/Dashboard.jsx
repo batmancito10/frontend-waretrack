@@ -52,9 +52,9 @@ function Dashboard() {
     cursor: 'pointer',
   };
 
-  const idClick = (id) => {
-    navigate('/detalle-sede', { state: { sedeId: id } });
-  };
+  function verDetalles(id) {
+    navigate(`/detalle-sede/${id}`);
+  }
 
   return (
     <div className={styles.dashboard}>
@@ -74,12 +74,14 @@ function Dashboard() {
                 <div key={index} className="row">
                   {sedesGroup.map((sede) => (
                     <div
-                      className="div-clickeable col-xl-4 col-sm-6 mb-xl-0 mb-4"
+                      className="div-clickeable col-xl-4 col-sm-6 mb-xl-0 mb-4 "
                       style={clickeable}
                       key={sede.id}
-                      onClick={() => idClick(sede.id)}
                     >
-                      <div className="card">
+                      <div
+                        className="card"
+                        onClick={() => verDetalles(sede.id)}
+                      >
                         <div className="card-body p-3">
                           <div className="row">
                             <div className="col-8">
