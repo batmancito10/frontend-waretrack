@@ -19,8 +19,8 @@ const AgregarServicioModal = ({
     nombre: '',
     descripcion: '',
     precio: '',
-    groups: [],
     sedes: [],
+    groups: [],
   });
 
   const inputHandler = (name) => {
@@ -69,15 +69,11 @@ const AgregarServicioModal = ({
   };
 
   const limpiarFormulario = () => {
-    setAgregarUsuarioModal(false);
+    setAgregarServicioModal(false);
     setValues({
-      password: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-      deleted_at: null,
-      salario: 0,
-      cargo: '',
+      name: '',
+      precio: '',
+      descripcion: '',
       groups: [],
       sedes: [],
     });
@@ -116,7 +112,7 @@ const AgregarServicioModal = ({
     const sedeData = selectedOption.map((option) => {
       return option.value;
     });
-    setValues({ ...values, ['sede']: sedeData });
+    setValues({ ...values, ['sedes']: sedeData });
   };
 
   useEffect(() => {
@@ -271,7 +267,7 @@ const AgregarServicioModal = ({
               type="button"
               data-bs-dismiss="modal"
               id="closeAgregarUsuario"
-              //   onClick={limpiarFormulario}
+              onClick={limpiarFormulario}
             >
               Cancelar
             </button>
