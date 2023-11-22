@@ -38,7 +38,11 @@
   animation: selected 0.2s linear;
 }
 
-.card.active .card_location {
+.card.active .card_location > * {
+  color: white;
+}
+
+.card.active .title {
   color: white;
 }
 

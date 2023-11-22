@@ -1,9 +1,8 @@
-import { useContext, useState } from 'react';
-import { PageTitle } from '../../../App';
+import { useState } from 'react';
+import requestApi from '../../utils/requestApi';
 
 const AgregarSede = () => {
   const accessToken = localStorage.getItem('accessToken');
-  const { setTitle } = useContext(PageTitle);
 
   const [nombre, setNombre] = useState('');
   const [direccion, setDireccion] = useState('');
@@ -34,24 +33,11 @@ const AgregarSede = () => {
     company: userInfo?.company.id,
   };
 
-  const agregarSedeRequest = async () => {
-    try {
-      const response = await fetch(import.meta.env.VITE_SEDE, {
-        mode: 'cors',
-        method: 'post',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error('Error en la solicitud');
-      }
-    } catch (error) {
-      console.error('Ha ocurrido un error: ', error);
-    }
-  };
+  function agregarSede() {
+    requestApi('sede', 'POST', data)
+      .then(() => setShowModalSede(false))
+      .catch(() => alert('no se puede agregar esta sede, verifica los campos'));
+  }
 
   return (
     <>
@@ -73,8 +59,7 @@ const AgregarSede = () => {
             <button
               type="button"
               className="btn-close text-dark"
-              data-bs-dismiss="modal"
-              aria-label="Close"
+              onClick={() => setShowModalSede(false)}
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -91,6 +76,7 @@ const AgregarSede = () => {
                       name="first-name"
                       value={nombre}
                       onChange={handleChangeNombre}
+                      required
                     />
                   </div>
                 </div>
@@ -103,6 +89,7 @@ const AgregarSede = () => {
                       className="form-control w-65"
                       value={direccion}
                       onChange={handleChangeDireccion}
+                      required
                     />
                   </div>
                 </div>
@@ -117,6 +104,7 @@ const AgregarSede = () => {
                       className="form-control w-65"
                       value={ciudad}
                       onChange={handleChangeCiudad}
+                      required
                     />
                   </div>
                 </div>
@@ -136,7 +124,7 @@ const AgregarSede = () => {
               type="submit"
               form="AgregarUsuario"
               data-bs-dismiss="modal"
-              onClick={agregarSedeRequest}
+              onClick={agregarSede}
             >
               Agregar sede
             </button>
