@@ -6,6 +6,7 @@ import TotalProductos from '../../components/metricas/TotalProductos';
 import styles from '../../assets/css/modules/dashboard.module.css';
 import { Carousel } from 'react-responsive-carousel';
 import { useNavigate } from 'react-router-dom';
+import AgregarSede from '../../components/modals/sedes/AgregarSede';
 
 function Dashboard() {
   const { setTitle } = useContext(PageTitle);
@@ -60,6 +61,7 @@ function Dashboard() {
       <div className={styles.container_sedes}>
         <div className="container-title-sedes">
           <h6>Sedes</h6>
+          <AgregarSede />
           <div className="carrousel-sedes">
             <Carousel
               showArrows={true}
