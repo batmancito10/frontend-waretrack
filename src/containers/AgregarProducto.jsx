@@ -45,7 +45,7 @@ function AgregarProducto({
         <div className="container_card">
           <div className="modal-header mb-1">
             <h5 className="modal-title" id="exampleModalLabel">
-              Agregar pedido
+              Agregar producto
             </h5>
             <button
               type="button"
@@ -222,21 +222,6 @@ function AgregarProducto({
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="form-group d-flex">
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                <label htmlFor="recipient-name" className="col-form-label">
-                  TOTAL PEDIDO:
-                </label>
-              </div>
-              <div
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              ></div>
             </div>
             <div className="modal-footer">
               <button

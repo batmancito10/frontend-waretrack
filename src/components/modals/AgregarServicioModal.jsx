@@ -136,7 +136,7 @@ const AgregarServicioModal = ({
 
   return (
     <div className={agregarServicioModal ? ' overlay modal_open' : 'overlay'}>
-      <div className="container_card">
+      <div className="container_card d-flex justify-content-around">
         <div className="card-header text-left">
           <h3
             className="font-weight-bolder"
@@ -220,29 +220,6 @@ const AgregarServicioModal = ({
                     value={sedeSelected}
                     required
                   />
-                </div>
-              </div>
-            </div>
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <div className="d-flex gap-2 align-items-center justify-content-between">
-                  <label className="fs-6 pt-1">Grupos</label>
-                  {dataReceived ? (
-                    <Select
-                      isMulti
-                      name="groups"
-                      options={groupList}
-                      id={`${'Agregar'}Groups`}
-                      className="w-65"
-                      onChange={changeGroups}
-                      isSearchable={false}
-                      value={groupSelected}
-                    />
-                  ) : (
-                    <select className="form-select w-65">
-                      <option value="">Loading...</option>
-                    </select>
-                  )}
                 </div>
               </div>
             </div>
