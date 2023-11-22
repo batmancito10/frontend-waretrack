@@ -14,6 +14,7 @@ function CardCategorias() {
 
   const [servicios, setServicios] = useState([]);
   const [productos, setProductos] = useState([]);
+  const [activos, setActivos] = useState([]);
 
   function obtenerServicios() {
     requestApi('/servicio', 'GET', {}).then((response) =>
@@ -21,10 +22,12 @@ function CardCategorias() {
     );
   }
 
-  function obtenerProductos() {
-    requestApi('/producto', 'GET', {}).then((response) =>
-      setProductos(response)
-    );
+  function obtenerProductosActivos() {
+    // obtiene los productos y los activos, se setean por separado
+    requestApi('producto/activos', 'GET', {}).then((response) => {
+      setProductos(response.productos);
+      setActivos(response.activos);
+    });
   }
 
   function abrirPanelServicio() {
@@ -47,7 +50,7 @@ function CardCategorias() {
 
   useEffect(() => {
     obtenerServicios();
-    obtenerProductos();
+    obtenerProductosActivos();
     return () => {};
   }, []);
 
@@ -101,8 +104,8 @@ function CardCategorias() {
                 ))
               ) : (
                 <div className="d-flex flex-column">
-                  <h6 className="mb-1 text-dark font-weight-bold text-sm">
-                    Aún no se cuentan con productos
+                  <h6 className="mb-2 text-dark font-weight-bold text-sm text-center">
+                    Aún no se cuentan con servicios
                   </h6>
                 </div>
               )}
@@ -146,7 +149,7 @@ function CardCategorias() {
                 ))
               ) : (
                 <div className="d-flex flex-column">
-                  <h6 className="mb-1 text-dark font-weight-bold text-sm">
+                  <h6 className="mb-2 text-dark font-weight-bold text-sm text-center">
                     Aún no se cuentan con productos
                   </h6>
                 </div>
@@ -170,18 +173,30 @@ function CardCategorias() {
           </div>
           <div className="card-body p-3 pb-0">
             <ul className="list-group">
-              <li
-                className="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg"
-                style={{ cursor: 'pointer' }}
-              >
+              {activos.length > 0 ? (
+                activos.map((activo) => (
+                  <li
+                    className="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg"
+                    key={activo.id}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="d-flex flex-column">
+                      <h6 className="mb-1 text-dark font-weight-bold text-sm">
+                        {activo.nombre}
+                      </h6>
+                    </div>
+                    <div className="d-flex align-items-center text-sm">
+                      {activo.precio}
+                    </div>
+                  </li>
+                ))
+              ) : (
                 <div className="d-flex flex-column">
-                  <h6 className="mb-1 text-dark font-weight-bold text-sm">
-                    Servicio 1
+                  <h6 className="mb-2 text-dark font-weight-bold text-sm text-center">
+                    Aún no se cuentan con Activos
                   </h6>
-                  <span className="text-xs">Categoria a la que pertenece</span>
                 </div>
-                <div className="d-flex align-items-center text-sm">Precio</div>
-              </li>
+              )}
             </ul>
           </div>
         </div>

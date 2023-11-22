@@ -9,6 +9,59 @@ const EditarSede = ({ id, inputBloqueado }) => {
   const [dataReceived, setDataRecived] = useState(false);
   const [sedeList, setSedeList] = useState([]);
 
+  const [nombre, setNombre] = useState(sede.nombre || '');
+  const [direccion, setDireccion] = useState(sede.direccion || '');
+  const [sedeSelected, setSedeSelected] = useState([]);
+
+  const [values, setValues] = useState([]);
+  const handleChange = (selectedOption) => {
+    setSedeSelected(selectedOption);
+    setValues(selectedOption.map((option) => option.value));
+  };
+
+  const handleChangeNombre = (e) => {
+    console.log(e);
+    const nuevoNombre = e.target.value;
+    console.log(nuevoNombre);
+    setNombre(nuevoNombre);
+  };
+
+  const handleChangeDireccion = (e) => {
+    const nuevoDireccion = e.target.value;
+    setDireccion(nuevoDireccion);
+  };
+
+  const editarProveedorRequest = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      nombre: nombre,
+      direccion: direccion,
+      sede: values,
+      ciudad: sede.ciudad,
+    };
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SEDE}${id}/`, {
+        mode: 'cors',
+        method: 'put',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log('Actualización exitosa');
+      } else {
+        console.log('Error al actualizar');
+      }
+    } catch (error) {
+      console.error('Hubo un error al hacer la solicitud', error);
+    }
+  };
+
   useEffect(() => {
     fetch(import.meta.env.VITE_SEDE, {
       mode: 'cors',
@@ -62,64 +115,11 @@ const EditarSede = ({ id, inputBloqueado }) => {
       });
   }, [setTitle]);
 
-  const [values, setValues] = useState([]);
-  const handleChange = (selectedOption) => {
-    setSedeSelected(selectedOption);
-    setValues(selectedOption.map((option) => option.value));
-  };
-
-  const [nombre, setNombre] = useState(sede.nombre || '');
-  const [direccion, setDireccion] = useState(sede.direccion || '');
-  const [sedeSelected, setSedeSelected] = useState([]);
-
   useEffect(() => {
     setNombre(sede.nombre);
     setDireccion(sede.direccion);
     setSedeSelected(sedeSelected);
   }, [sede]);
-
-  const handleChangeNombre = (e) => {
-    console.log(e);
-    const nuevoNombre = e.target.value;
-    console.log(nuevoNombre);
-    setNombre(nuevoNombre);
-  };
-
-  const handleChangeDireccion = (e) => {
-    const nuevoDireccion = e.target.value;
-    setDireccion(nuevoDireccion);
-  };
-
-  const editarProveedorRequest = async (e) => {
-    e.preventDefault();
-
-    const data = {
-      nombre: nombre,
-      direccion: direccion,
-      sede: values,
-      ciudad: sede.ciudad,
-    };
-
-    try {
-      const response = await fetch(`${import.meta.env.VITE_SEDE}${id}/`, {
-        mode: 'cors',
-        method: 'put',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        console.log('Actualización exitosa');
-      } else {
-        console.log('Error al actualizar');
-      }
-    } catch (error) {
-      console.error('Hubo un error al hacer la solicitud', error);
-    }
-  };
 
   return (
     <>

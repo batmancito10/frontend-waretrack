@@ -10,9 +10,6 @@ const PerfilSede = () => {
   const accessToken = localStorage.getItem('accessToken');
   const { setTitle } = useContext(PageTitle);
   const [inputBloqueado, setInputBloqueado] = useState(true);
-
-  //modales
-  const [showModalEditar, setShowModalEditar] = useState(false);
   const [showModalEliminar, setShowModalEliminar] = useState(false);
 
   const handleInput = () => {
@@ -174,9 +171,6 @@ const PerfilSede = () => {
           </div>
         </div>
       </div>
-      {/* <SedePedidos idProveedor={idProveedor}></SedePedidos> */}
-
-      {/* Modal para poder eliminar un usuario  */}
       <EliminarSede
         id={id}
         NombreSede={NombreSede}
