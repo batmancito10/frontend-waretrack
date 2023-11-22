@@ -1,15 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { PageTitle } from '../../App';
 import { useLocation } from 'react-router-dom';
-import EditarProveedor from '../../components/modals/proveedores/EditarProveedor.jsx';
-import SedePedidos from '../../containers/SedePedidos';
-import EliminarProveedor from '../../components/modals/proveedores/EliminarProveedor';
+import { PageTitle } from '../../App';
+import EditarSede from '../../components/modals/sedes/EditarSede';
+import EliminarSede from '../../components/modals/sedes/EliminarSede';
 
-function PerfilProveedor() {
+const PerfilSede = () => {
   const location = useLocation();
-  const idProveedor = location.state?.proveedorId;
+  const idSede = location.state?.sedeId;
 
-  const [proveedor, setProveedor] = useState([]);
+  const [sede, setSede] = useState([]);
   const accessToken = localStorage.getItem('accessToken');
   const { setTitle } = useContext(PageTitle);
   const [inputBloqueado, setInputBloqueado] = useState(true);
@@ -18,28 +17,24 @@ function PerfilProveedor() {
     setInputBloqueado(!inputBloqueado);
   };
 
-  const proveedorRequest = async () => {
-    const response = await fetch(
-      `${import.meta.env.VITE_PROVEEDOR}${idProveedor}/`,
-      {
-        mode: 'cors',
-        method: 'get',
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
+  const SedeRequest = async () => {
+    const response = await fetch(`${import.meta.env.VITE_SEDE}${idSede}/`, {
+      mode: 'cors',
+      method: 'get',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     const jsonResponse = await response.json();
     return jsonResponse;
   };
 
   useEffect(() => {
-    setTitle('Perfil Proveedores');
-    proveedorRequest().then((data) => {
-      setProveedor(data);
+    setTitle('Perfil Sede');
+    SedeRequest().then((data) => {
+      setSede(data);
     });
   }, []);
 
-  const nombreProveedor = proveedor.nombre;
-
+  const NombreSede = sede.nombre;
   return (
     <div className="container-fluid">
       <div className="container-fluid">
@@ -54,24 +49,12 @@ function PerfilProveedor() {
         </div>
         <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="row gx-4">
-            <div className="col-auto">
-              <div className="avatar avatar-xl position-relative">
-                <img
-                  src={
-                    proveedor.imagen
-                      ? proveedor.imagen
-                      : 'https://cdn1.iconfinder.com/data/icons/programing-development-8/24/react_logo-512.png'
-                  }
-                  alt="profile_image"
-                  className="w-100 border-radius-lg shadow-sm"
-                />
-              </div>
-            </div>
+            <div className="col-auto"></div>
             <div className="col-auto my-auto">
               <div className="h-100">
-                <h5 className="mb-1">{proveedor.nombre}</h5>
+                <h5 className="mb-1">{sede.nombre}</h5>
                 <p className="mb-0 font-weight-bold text-sm">
-                  {proveedor.direccion}
+                  {sede.direccion}
                 </p>
               </div>
             </div>
@@ -179,30 +162,26 @@ function PerfilProveedor() {
                           </g>
                         </g>
                       </svg>
-                      <span className="ms-1">Eliminar proveedor</span>
+                      <span className="ms-1">Eliminar sede</span>
                     </a>
                   </li>
                 </ul>
               </div>
             </div>
-
-            <EditarProveedor
-              idProveedor={idProveedor}
+            <EditarSede
+              idSede={idSede}
               inputBloqueado={inputBloqueado}
               handleInput={handleInput}
-            ></EditarProveedor>
+            />
           </div>
         </div>
       </div>
-      <SedePedidos idProveedor={idProveedor}></SedePedidos>
+      {/* <SedePedidos idProveedor={idProveedor}></SedePedidos> */}
 
       {/* Modal para poder eliminar un usuario  */}
-      <EliminarProveedor
-        idProveedor={idProveedor}
-        nombreProveedor={nombreProveedor}
-      ></EliminarProveedor>
+      <EliminarSede idSede={idSede} NombreSede={NombreSede}></EliminarSede>
     </div>
   );
-}
+};
 
-export default PerfilProveedor;
+export default PerfilSede;

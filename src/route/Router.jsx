@@ -15,6 +15,7 @@ import StockTable from '../containers/StockTable';
 import Ventas from '../pages/views/Ventas';
 import Facturas from '../pages/views/Facturas';
 import ListarFacturas from '../components/facturas/ListarFacturas';
+import PerfilSede from '../pages/views/PerfilSede';
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function Router() {
               element={<PedidosProveedores />}
             />
             <Route path="detalle-proveedor" element={<PerfilProveedor />} />
+            <Route path="detalle-sede" element={<PerfilSede />} />
             <Route
               path="categorias-servicios"
               element={<CategoriasServicios />}
